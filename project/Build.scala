@@ -3,7 +3,7 @@ import sbt.Keys._
 
 object ProjectBuild extends Build {
 
-  lazy val buildVersion =  "1.4.0"
+  lazy val buildVersion =  "1.5.0"
 
   lazy val root = Project(id = "play-plugins-salat", base = file("."), settings = Project.defaultSettings ++ Publish.settings).settings(
     organization := "se.radley",
@@ -24,8 +24,8 @@ object ProjectBuild extends Build {
       "com.typesafe.play" %% "play" % "2.2.1" % "provided",
       "com.typesafe.play" % "play-exceptions" % "2.2.1" % "provided",
       "com.typesafe.play" %% "play-test" % "2.2.1" % "test",
-      "com.novus" %% "salat" % "1.9.4",
-      "org.mongodb" %% "casbah-gridfs" % "2.6.3"
+      "com.novus" %% "salat" % "1.9.+",
+      "org.mongodb" %% "casbah-gridfs" % "2.7.+"
     )
   )
 }
