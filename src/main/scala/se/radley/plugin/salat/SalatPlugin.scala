@@ -4,7 +4,7 @@ import play.api._
 import play.api.mvc._
 import play.api.Play.current
 import com.mongodb.casbah._
-import com.mongodb.{MongoClientOptions, MongoException, ServerAddress, MongoOptions}
+import com.mongodb.{ MongoClientOptions, MongoException, ServerAddress, MongoOptions }
 import com.mongodb.casbah.gridfs.GridFS
 import commons.MongoDBObject
 import com.mongodb.casbah.MongoClientOptions
@@ -14,14 +14,13 @@ class SalatPlugin(app: Application) extends Plugin {
   lazy val configuration = app.configuration.getConfig("mongodb").getOrElse(Configuration.empty)
 
   case class MongoSource(
-    val hosts: List[ServerAddress],
-    val dbName: String,
-    val writeConcern: com.mongodb.WriteConcern,
-    val user: Option[String] = None,
-    val password: Option[String] = None,
-    val options: Option[MongoClientOptions],
-    private var conn: MongoClient = null
-  ){
+      val hosts: List[ServerAddress],
+      val dbName: String,
+      val writeConcern: com.mongodb.WriteConcern,
+      val user: Option[String] = None,
+      val password: Option[String] = None,
+      val options: Option[MongoClientOptions],
+      private var conn: MongoClient = null) {
 
     def connection: MongoClient = {
       if (conn == null) {
@@ -68,8 +67,8 @@ class SalatPlugin(app: Application) extends Plugin {
 
     override def toString() = {
       (if (user.isDefined) user.get + "@" else "") +
-      hosts.map(h => h.getHost + ":" + h.getPort).mkString(", ") +
-      "/" + dbName + options.map(" with Options[" + _ + "]").getOrElse("")
+        hosts.map(h => h.getHost + ":" + h.getPort).mkString(", ") +
+        "/" + dbName + options.map(" with Options[" + _ + "]").getOrElse("")
     }
   }
 
@@ -99,8 +98,8 @@ class SalatPlugin(app: Application) extends Plugin {
       // Simple config
       val host = source.getString("host").getOrElse("127.0.0.1")
       val port = source.getInt("port").getOrElse(27017)
-      val user:Option[String] = source.getString("user")
-      val password:Option[String] = source.getString("password")
+      val user: Option[String] = source.getString("user")
+      val password: Option[String] = source.getString("password")
 
       // Replica set config
       val hosts: List[ServerAddress] = source.getConfig("replicaset").map { replicaset =>
@@ -141,7 +140,7 @@ class SalatPlugin(app: Application) extends Plugin {
     }
   }
 
-  override def onStop(){
+  override def onStop() {
     sources.map { source =>
       // @fix See if we can get around the plugin closing connections in testmode
       if (app.mode != Mode.Test)
@@ -163,7 +162,7 @@ class SalatPlugin(app: Application) extends Plugin {
    * @param sourceName The source name ex. default
    * @return A MongoDB
    */
-  def db(sourceName:String = "default"): MongoDB = source(sourceName).db
+  def db(sourceName: String = "default"): MongoDB = source(sourceName).db
 
   /**
    * Returns MongoCollection that has been configured in application.conf
@@ -171,7 +170,7 @@ class SalatPlugin(app: Application) extends Plugin {
    * @param sourceName The source name ex. default
    * @return A MongoCollection
    */
-  def collection(collectionName:String, sourceName:String = "default"): MongoCollection = source(sourceName).collection(collectionName)
+  def collection(collectionName: String, sourceName: String = "default"): MongoCollection = source(sourceName).collection(collectionName)
 
   /**
    * Returns Capped MongoCollection that has been configured in application.conf
@@ -181,7 +180,7 @@ class SalatPlugin(app: Application) extends Plugin {
    * @param sourceName The source name ex. default
    * @return A MongoCollection
    */
-  def cappedCollection(collectionName:String, size: Long, max: Option[Long] = None, sourceName:String = "default"): MongoCollection = source(sourceName).cappedCollection(collectionName, size, max)
+  def cappedCollection(collectionName: String, size: Long, max: Option[Long] = None, sourceName: String = "default"): MongoCollection = source(sourceName).cappedCollection(collectionName, size, max)
 
   /**
    * Returns GridFS for configured source
@@ -189,5 +188,5 @@ class SalatPlugin(app: Application) extends Plugin {
    * @param sourceName The source name ex. default
    * @return A GridFS
    */
-  def gridFS(bucketName: String = "fs", sourceName:String = "default"): GridFS = source(sourceName).gridFS(bucketName)
+  def gridFS(bucketName: String = "fs", sourceName: String = "default"): GridFS = source(sourceName).gridFS(bucketName)
 }
