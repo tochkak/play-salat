@@ -17,11 +17,10 @@ case class User(
   id: ObjectId = new ObjectId,
   username: String,
   password: String,
-  address: Option[Address] = None,
+  address: List[Address] = Nil,
   added: Date = new Date(),
   updated: Option[Date] = None,
-  @Key("company_id")company: Option[ObjectId] = None
-)
+  @Key("company_id") company: Option[ObjectId] = None)
 
 object User extends UserDAO with UserJson
 
@@ -33,14 +32,15 @@ trait UserDAO extends ModelCompanion[User, ObjectId] {
   collection.ensureIndex(DBObject("username" -> 1), "user_email", unique = true)
 
   // Queries
-  def findOneByUsername(username: String): Option[User] = dao.findOne(MongoDBObject("username" -> username))
-  def findByCountry(country: String) = dao.find(MongoDBObject("address.country" -> country))
-  def authenticate(username: String, password: String): Option[User] = findOne(DBObject("username" -> username, "password" -> password))
+  def findOneByUsername(username: String): Option[User] =
+    dao.findOne(MongoDBObject("username" -> username))
+  def findByCountry(country: String) =
+    dao.find(MongoDBObject("address.country" -> country))
+  def authenticate(username: String, password: String): Option[User] =
+    findOne(DBObject("username" -> username, "password" -> password))
 }
 
-/**
- * Trait used to convert to and from json
- */
+/** Trait used to convert to and from json */
 trait UserJson {
 
   implicit val userJsonWrite = new Writes[User] {
@@ -50,17 +50,16 @@ trait UserJson {
         "username" -> u.username,
         "address" -> u.address,
         "added" -> u.added,
-        "updated" -> u.updated
-      )
+        "updated" -> u.updated)
     }
   }
+  
   implicit val userJsonRead = (
     (__ \ 'id).read[ObjectId] ~
     (__ \ 'username).read[String] ~
     (__ \ 'password).read[String] ~
-    (__ \ 'address).readNullable[Address] ~
+    (__ \ 'address).read[List[Address]] ~
     (__ \ 'added).read[Date] ~
     (__ \ 'updated).readNullable[Date] ~
-    (__ \ 'company).readNullable[ObjectId]
-  )(User.apply _)
+    (__ \ 'company).readNullable[ObjectId])(User.apply _)
 }

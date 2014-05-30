@@ -12,9 +12,11 @@ import mongoContext._
 
 object Users extends Controller {
 
-  def index() = Action {
-    val users = User.findAll().toList
-    Ok(Json.toJson(users))
+  def index(country: Option[String]) = Action {
+    country match {
+      case Some(country) => Ok(Json.toJson(User.findByCountry(country).toList))
+      case None => Ok(Json.toJson(User.findAll().toList))
+    }
   }
 
   def create = JsonAction[User] { user =>
