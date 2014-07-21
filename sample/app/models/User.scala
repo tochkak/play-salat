@@ -34,10 +34,19 @@ trait UserDAO extends ModelCompanion[User, ObjectId] {
   // Queries
   def findOneByUsername(username: String): Option[User] =
     dao.findOne(MongoDBObject("username" -> username))
+
   def findByCountry(country: String) =
     dao.find(MongoDBObject("address.country" -> country))
+
   def authenticate(username: String, password: String): Option[User] =
     findOne(DBObject("username" -> username, "password" -> password))
+
+  def addresses(username: String): List[Address] =
+    findOneByUsername(username).map { user =>
+      user.address
+    } getOrElse {
+      Nil
+    }
 }
 
 /** Trait used to convert to and from json */
@@ -53,7 +62,7 @@ trait UserJson {
         "updated" -> u.updated)
     }
   }
-  
+
   implicit val userJsonRead = (
     (__ \ 'id).read[ObjectId] ~
     (__ \ 'username).read[String] ~

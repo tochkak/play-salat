@@ -42,4 +42,11 @@ object Users extends Controller {
     User.removeById(id)
     Ok("")
   }
+  
+  def addresses(username: String, address: Option[Boolean]) = Action {
+    address match {
+      case Some(true) => Ok(Json.toJson(User.addresses(username)))
+      case _ => Ok(Json.toJson(User.findOneByUsername(username)))
+    }
+  }
 }
