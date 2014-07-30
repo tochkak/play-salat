@@ -26,11 +26,11 @@ It will ask you a couple of questions, and your ready to rock 'n roll.
 
 ### Manual installation
 Start by adding the plugin, in your `project/Build.scala`
-
-    val appDependencies = Seq(
-      "se.radley" %% "play-plugins-salat" % "1.5.0"
-    )
-
+````scala
+val appDependencies = Seq(
+  "se.radley" %% "play-plugins-salat" % "1.5.0"
+)
+````
 Then we can add the implicit converstions to and from ObjectId by adding to the routesImport and add ObjectId to all the templates
 
 **Play 2.2.x and previous**
@@ -43,7 +43,7 @@ val main = PlayProject(appName, appVersion, appDependencies, mainLang = SCALA).s
 ````
 **Play 2.3.x and subsequent**
 
-````
+````scala
 import play.twirl.sbt.Import.TwirlKeys
 val main = Project(appName, file(".")).enablePlugins(play.PlayScala).settings(
   routesImport += "se.radley.plugin.salat.Binders._",
@@ -124,71 +124,70 @@ Then you can call `mongoCollection("collectionname", "myotherdb")`
 
 ## What a model looks like
 All models must be case classes otherwise salat doesn't know how to properly transform them into MongoDBObject's
+````scala
+package models
 
-    package models
+import play.api.Play.current
+import java.util.Date
+import com.novus.salat._
+import com.novus.salat.annotations._
+import com.novus.salat.dao._
+import com.mongodb.casbah.Imports._
+import se.radley.plugin.salat._
+import mongoContext._
 
-    import play.api.Play.current
-    import java.util.Date
-    import com.novus.salat._
-    import com.novus.salat.annotations._
-    import com.novus.salat.dao._
-    import com.mongodb.casbah.Imports._
-    import se.radley.plugin.salat._
-    import mongoContext._
+case class User(
+  id: ObjectId = new ObjectId,
+  username: String,
+  password: String,
+  address: Option[Address] = None,
+  added: Date = new Date(),
+  updated: Option[Date] = None,
+  deleted: Option[Date] = None,
+  @Key("company_id")company: Option[ObjectId] = None
+)
 
-    case class User(
-      id: ObjectId = new ObjectId,
-      username: String,
-      password: String,
-      address: Option[Address] = None,
-      added: Date = new Date(),
-      updated: Option[Date] = None,
-      deleted: Option[Date] = None,
-      @Key("company_id")company: Option[ObjectId] = None
-    )
+object User extends ModelCompanion[User, ObjectId] {
+  val dao = new SalatDAO[User, ObjectId](collection = mongoCollection("users")) {}
 
-    object User extends ModelCompanion[User, ObjectId] {
-      val dao = new SalatDAO[User, ObjectId](collection = mongoCollection("users")) {}
-
-      def findOneByUsername(username: String): Option[User] = dao.findOne(MongoDBObject("username" -> username))
-      def findByCountry(country: String) = dao.find(MongoDBObject("address.country" -> country))
-    }
-
+  def findOneByUsername(username: String): Option[User] = dao.findOne(MongoDBObject("username" -> username))
+  def findByCountry(country: String) = dao.find(MongoDBObject("address.country" -> country))
+}
+````
 ## Capped Collections
 If you want to use capped collections check this out
+````scala
+package models
 
-    package models
+import play.api.Play.current
+import java.util.Date
+import com.novus.salat._
+import com.novus.salat.annotations._
+import com.novus.salat.dao._
+import com.mongodb.casbah.Imports._
+import se.radley.plugin.salat._
+import mongoContext._
 
-    import play.api.Play.current
-    import java.util.Date
-    import com.novus.salat._
-    import com.novus.salat.annotations._
-    import com.novus.salat.dao._
-    import com.mongodb.casbah.Imports._
-    import se.radley.plugin.salat._
-    import mongoContext._
+case class LogItem(
+  id: ObjectId = new ObjectId,
+  message: String
+)
 
-    case class LogItem(
-      id: ObjectId = new ObjectId,
-      message: String
-    )
-
-    object LogItem extends ModelCompanion[LogItem, ObjectId] {
-      val dao = new SalatDAO[LogItem, ObjectId](collection = mongoCappedCollection("logitems", 1000)) {}
-    }
-
+object LogItem extends ModelCompanion[LogItem, ObjectId] {
+  val dao = new SalatDAO[LogItem, ObjectId](collection = mongoCappedCollection("logitems", 1000)) {}
+}
+````
 ## GridFS
 If you want to store things in gridfs you can do this
+````
+package models
 
-    package models
+import play.api.Play.current
+import se.radley.plugin.salat._
+import mongoContext._
 
-    import play.api.Play.current
-    import se.radley.plugin.salat._
-    import mongoContext._
-
-    val files = gridFS("myfiles")
-
-
+val files = gridFS("myfiles")
+````
 ## Mongo Context
 All models must contain an implicit salat Context. The context is somewhat like a hibernate dialect.
 You can override mapping names and configure how salat does it's type hinting. read more about it [here](https://github.com/novus/salat/wiki/CustomContext)
