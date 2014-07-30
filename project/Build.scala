@@ -9,7 +9,7 @@ object ProjectBuild extends Build {
     organization := "se.radley",
     description := "MongoDB Salat plugin for PlayFramework 2",
     version := buildVersion,
-    scalaVersion := "2.11.1",
+    scalaVersion := "2.11.2",
     scalacOptions ++= Seq("-unchecked", "-deprecation", "-feature"),
     crossScalaVersions ++= Seq("2.10.4"),
     parallelExecution in Test := false,
@@ -22,9 +22,9 @@ object ProjectBuild extends Build {
     ),
 
     libraryDependencies ++= Seq(
-      "com.typesafe.play" %% "play" % "2.3.1" % "provided",
-      "com.typesafe.play" % "play-exceptions" % "2.3.1" % "provided",
-      "com.typesafe.play" %% "play-test" % "2.3.1" % "test",
+      "com.typesafe.play" %% "play" % "2.3.2" % "provided",
+      "com.typesafe.play" % "play-exceptions" % "2.3.2" % "provided",
+      "com.typesafe.play" %% "play-test" % "2.3.2" % "test",
       "com.novus" %% "salat" % "1.9.8",
       "org.mongodb" %% "casbah-gridfs" % "2.7.2"
     )

@@ -1,6 +1,8 @@
 import sbt._
 import Keys._
-import play.Project._
+import play.Play.autoImport._
+import PlayKeys._
+import play.twirl.sbt.Import.TwirlKeys
 
 object ApplicationBuild extends Build {
 
@@ -8,12 +10,15 @@ object ApplicationBuild extends Build {
     val appVersion      = "1.0"
 
     val appDependencies = Seq(
-      "se.radley" %% "play-plugins-salat" % "1.4.0"
+      "com.typesafe.play" %% "play-ws" % "2.3.2",
+      "se.radley" %% "play-plugins-salat" % "1.5.0"
     )
 
-    val main = play.Project(appName, appVersion, appDependencies).settings(
+    val main = Project(appName, file(".")).enablePlugins(play.PlayScala).settings(
+      version :=appVersion,
+      libraryDependencies ++= appDependencies,
       routesImport += "se.radley.plugin.salat.Binders._",
-      templatesImport += "org.bson.types.ObjectId",
+      TwirlKeys.templateImports += "org.bson.types.ObjectId",
       resolvers += Resolver.sonatypeRepo("snapshots")
     )
 

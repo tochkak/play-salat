@@ -12,7 +12,7 @@ object Global extends GlobalSettings {
       User.save(User(
         username = "leon",
         password = "1234",
-        address = Some(Address("Örebro", "123 45", "Sweden"))
+        address = Some(Address("��rebro", "123 45", "Sweden"))
       ))
 
       User.save(User(

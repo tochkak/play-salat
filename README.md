@@ -33,10 +33,23 @@ Start by adding the plugin, in your `project/Build.scala`
 
 Then we can add the implicit converstions to and from ObjectId by adding to the routesImport and add ObjectId to all the templates
 
-    val main = PlayProject(appName, appVersion, appDependencies, mainLang = SCALA).settings(
-      routesImport += "se.radley.plugin.salat.Binders._",
-      templatesImport += "org.bson.types.ObjectId"
-    )
+**Play 2.2.x and previous**
+
+````scala
+val main = PlayProject(appName, appVersion, appDependencies, mainLang = SCALA).settings(
+  routesImport += "se.radley.plugin.salat.Binders._",
+  templatesImport += "org.bson.types.ObjectId"
+)
+````
+**Play 2.3.x and subsequent**
+
+````
+import play.twirl.sbt.Import.TwirlKeys
+val main = Project(appName, file(".")).enablePlugins(play.PlayScala).settings(
+  routesImport += "se.radley.plugin.salat.Binders._",
+  TwirlKeys.templateImports += "org.bson.types.ObjectId"
+)
+````
 
 We now need to register the plugin, this is done by creating(or appending) to the `conf/play.plugins` file
 
