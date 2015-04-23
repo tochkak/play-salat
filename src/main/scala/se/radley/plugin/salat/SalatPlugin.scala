@@ -8,6 +8,7 @@ import com.mongodb.{ MongoClientOptions, MongoException, ServerAddress, MongoOpt
 import com.mongodb.casbah.gridfs.GridFS
 import commons.MongoDBObject
 import com.mongodb.casbah.MongoClientOptions
+import scala.util.Try
 
 class SalatPlugin(app: Application) extends Plugin {
 
@@ -24,15 +25,20 @@ class SalatPlugin(app: Application) extends Plugin {
 
     def connection: MongoClient = {
       if (conn == null) {
-        conn = options.map(opts => MongoClient(hosts, opts)).getOrElse(MongoClient(hosts))
 
-        val authOpt = for {
-          u <- user
-          p <- password
-        } yield connection(dbName).authenticate(u, p)
+        val credentials = {
+          val maybe = for {
+            u <- user
+            p <- password
+          } yield MongoCredential.createMongoCRCredential(u, dbName, p.toArray)
 
-        if (!authOpt.getOrElse(true)) {
-          throw configuration.reportError("mongodb", "Access denied to MongoDB database: [" + dbName + "] with user: [" + user.getOrElse("") + "]")
+          List(maybe).flatten
+        }
+
+        conn = Try( 
+          options.map(MongoClient(hosts, credentials, _)).getOrElse(MongoClient(hosts, credentials))
+        ).getOrElse {
+          throw configuration.reportError("mongodb", s"Access denied to MongoDB database: [$dbName] with user: [${user.getOrElse("")}]")
         }
 
         conn.setWriteConcern(writeConcern)
@@ -78,7 +84,7 @@ class SalatPlugin(app: Application) extends Plugin {
 
     source.getString("uri").map { str =>
       // MongoURI config - http://www.mongodb.org/display/DOCS/Connections
-      val uri = MongoURI(str)
+      val uri = MongoClientURI(str)
       val hosts = uri.hosts.map { host =>
         if (host.contains(':')) {
           val Array(h, p) = host.split(':')
