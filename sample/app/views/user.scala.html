@@ -2,5 +2,12 @@
 
 @main("Hello World!") {
    <h1>Hello my name is @user.username</h1>
+   <p>I live in:
+   	<ul>
+        @user.address.map { adr =>
+            <li>@adr.street, @adr.zip, @adr.country</li>
+        }
+    </ul>
+   </p>
    <p>I was added on @user.added.format("dd MMM yyyy")</p>
 }
