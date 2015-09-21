@@ -9,8 +9,9 @@ import com.mongodb.casbah.gridfs.GridFS
 import commons.MongoDBObject
 import com.mongodb.casbah.MongoClientOptions
 import scala.util.Try
+import javax.inject.Inject
 
-class SalatPlugin(app: Application) extends Plugin {
+class SalatPlugin @Inject()(app: Application) extends Plugin {
 
   lazy val configuration = app.configuration.getConfig("mongodb").getOrElse(Configuration.empty)
 
@@ -140,7 +141,10 @@ class SalatPlugin(app: Application) extends Plugin {
           try {
             source._2.connection(source._2.dbName).getCollectionNames()
           } catch {
-            case e: MongoException => throw configuration.reportError("mongodb." + source._1, "couldn't connect to [" + source._2.hosts.mkString(", ") + "]", Some(e))
+            case e: MongoException =>
+              Logger("play").debug("error: " + e.printStackTrace)
+
+              throw configuration.reportError("mongodb." + source._1, "couldn't connect to [" + source._2.hosts.mkString(", ") + "]", Some(e))
           } finally {
             Logger("play").info("mongodb [" + source._1 + "] connected at " + source._2)
           }
