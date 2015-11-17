@@ -39,9 +39,9 @@ object ObjectIdSpec extends Specification {
       objectIdPathBindable.unbind("id", id) must equalTo(id.toString)
     }
 
-    "bind to JavascriptLitteral" in {
+    "bind to JavascriptLiteral" in {
       val id = new ObjectId()
-      objectIdJavascriptLitteral.to(id) must equalTo(id.toString)
+      objectIdJavascriptLiteral.to(id) must equalTo(id.toString)
     }
 
     "write to json and read back into ObjectId" in {
