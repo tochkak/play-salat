@@ -8,8 +8,9 @@ import com.mongodb.{MongoClientOptions, MongoException, ServerAddress, MongoOpti
 import com.mongodb.casbah.gridfs.GridFS
 import commons.MongoDBObject
 import com.mongodb.casbah.MongoClientOptions
+import javax.inject.Inject
 
-class SalatPlugin(app: Application) extends Plugin {
+class SalatPlugin @Inject() (implicit app: Application) extends Plugin {
 
   lazy val configuration = app.configuration.getConfig("mongodb").getOrElse(Configuration.empty)
 
