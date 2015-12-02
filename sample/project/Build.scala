@@ -14,7 +14,7 @@ object ApplicationBuild extends Build {
 
     val appDependencies = Seq(
       "com.typesafe.play" %% "play-ws" % "2.4.2",
-      "se.radley" %% "play-plugins-salat" % "1.5.1"
+      "se.radley" %% "play-plugins-salat" % "1.5.6"
     )
 
     val main = Project(appName, file(".")).enablePlugins(play.PlayScala).settings(
