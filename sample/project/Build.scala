@@ -18,7 +18,7 @@ object ApplicationBuild extends Build {
 
     val main = Project(appName, file(".")).enablePlugins(play.PlayScala).settings(
       version :=appVersion,
-      scalaVersion := "2.11.6",
+      scalaVersion := "2.11.7",
       libraryDependencies ++= appDependencies,
       routesImport += "se.radley.plugin.salat.Binders._",
       TwirlKeys.templateImports += "org.bson.types.ObjectId",
