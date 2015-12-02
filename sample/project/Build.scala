@@ -23,6 +23,7 @@ object ApplicationBuild extends Build {
       libraryDependencies ++= appDependencies,
       RoutesKeys.routesImport += "se.radley.plugin.salat.Binders._",
       TwirlKeys.templateImports += "org.bson.types.ObjectId",
+      resolvers += "scalaz-bintray" at "https://dl.bintray.com/scalaz/releases",
       resolvers += Resolver.sonatypeRepo("snapshots")
     )
 
