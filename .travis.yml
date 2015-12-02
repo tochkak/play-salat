@@ -17,4 +17,4 @@ notifications:
 services:
   - mongodb
 
-sudo: required
+sudo: false
