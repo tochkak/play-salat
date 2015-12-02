@@ -4,6 +4,7 @@ import play.Play.autoImport._
 import play.Play
 import play.sbt.PlayImport._
 import play.twirl.sbt.Import._
+import play.sbt.routes.RoutesKeys
 
 
 object ApplicationBuild extends Build {
@@ -20,7 +21,7 @@ object ApplicationBuild extends Build {
       version :=appVersion,
       scalaVersion := "2.11.7",
       libraryDependencies ++= appDependencies,
-      routesImport += "se.radley.plugin.salat.Binders._",
+      RoutesKeys.routesImport += "se.radley.plugin.salat.Binders._",
       TwirlKeys.templateImports += "org.bson.types.ObjectId",
       resolvers += Resolver.sonatypeRepo("snapshots")
     )
