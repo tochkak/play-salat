@@ -13,7 +13,7 @@ object ApplicationBuild extends Build {
     val appVersion      = "1.0"
 
     val appDependencies = Seq(
-      "com.typesafe.play" %% "play-ws" % "2.4.2",
+      "com.typesafe.play" %% "play-ws" % "2.4.4",
       "se.radley" %% "play-plugins-salat" % "1.5.6"
     )
 
@@ -23,7 +23,6 @@ object ApplicationBuild extends Build {
       libraryDependencies ++= appDependencies,
       RoutesKeys.routesImport += "se.radley.plugin.salat.Binders._",
       TwirlKeys.templateImports += "org.bson.types.ObjectId",
-      resolvers += "scalaz-bintray" at "https://dl.bintray.com/scalaz/releases",
       resolvers += Resolver.sonatypeRepo("snapshots")
     )
 
