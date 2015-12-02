@@ -23,10 +23,11 @@ object ProjectBuild extends Build {
     libraryDependencies ++= Seq(
       "com.typesafe.play" %% "play" % "2.4.3" % "provided",
       "com.typesafe.play" % "play-exceptions" % "2.4.3" % "provided",
-      "com.typesafe.play" %% "play-test" % "2.4.3" % "test",
+      "com.typesafe.play" %% "play-specs2" % "2.4.3" % "test",
       "com.novus" %% "salat" % "1.9.9",
       "org.mongodb" %% "casbah" % "2.8.2"
     )
+    
   )
 }
 

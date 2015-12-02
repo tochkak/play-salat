@@ -57,4 +57,5 @@ object ObjectIdSpec extends Specification {
       JsString("not a object id").validate[ObjectId] must equalTo(JsError(Seq(JsPath() -> Seq(ValidationError("validate.error.objectid")))))
     }
   }
+  
 }

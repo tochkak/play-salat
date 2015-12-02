@@ -7,19 +7,18 @@ import javax.net.SocketFactory
 import org.specs2.specification.AllExpectations
 import sun.security.ssl.SSLSocketFactoryImpl
 
+
 class OptionsFromConfigSpec extends Specification with AllExpectations {
 
   "OptionsFromConfig" should {
     "Override all defaults when all props are present" in {
       val allNonDefaultConfiguration = Map(
-        ("mongodb.default.options.autoConnectRetry" -> "true"),
         ("mongodb.default.options.connectionsPerHost" -> "333"),
         ("mongodb.default.options.connectTimeout" -> "34000"),
         ("mongodb.default.options.cursorFinalizerEnabled" -> "true"),
         ("mongodb.default.options.dbDecoderFactory" -> "se.radley.plugin.salat.NonDefaultDBDecoderFactory"),
         ("mongodb.default.options.dbEncoderFactory" -> "se.radley.plugin.salat.NonDefaultDBEncoderFactory"),
         ("mongodb.default.options.description" -> "Some Description"),
-        ("mongodb.default.options.maxAutoConnectRetryTime" -> "20"),
         ("mongodb.default.options.maxWaitTime" -> "68000"),
         ("mongodb.default.options.readPreference" -> "PRIMARY"),
         ("mongodb.default.options.socketFactory" -> "se.radley.plugin.salat.NonDefaultSocketFactory"),
@@ -34,14 +33,12 @@ class OptionsFromConfigSpec extends Specification with AllExpectations {
       optionsOpt must beSome
       val options = optionsOpt.get
       // All Overridden
-      options.isAutoConnectRetry must beTrue
       options.getConnectionsPerHost must be equalTo(333)
       options.getConnectTimeout must be equalTo(34000)
       options.isCursorFinalizerEnabled must beTrue
       options.getDbDecoderFactory must haveClass[NonDefaultDBDecoderFactory]
       options.getDbEncoderFactory must haveClass[NonDefaultDBEncoderFactory]
       options.getDescription must be equalTo("Some Description")
-      options.getMaxAutoConnectRetryTime must be equalTo(20)
       options.getMaxWaitTime must be equalTo(68000)
       options.getReadPreference must be equalTo(ReadPreference.primary())
       options.getSocketFactory must haveClass[NonDefaultSocketFactory]

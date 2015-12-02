@@ -11,7 +11,7 @@ import com.mongodb.casbah.MongoClientOptions
 import scala.util.Try
 import javax.inject.Inject
 
-class SalatPlugin @Inject()(app: Application) extends Plugin {
+class SalatPlugin @Inject() (implicit app: Application) extends Plugin {
 
   lazy val configuration = app.configuration.getConfig("mongodb").getOrElse(Configuration.empty)
 
