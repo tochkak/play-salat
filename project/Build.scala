@@ -16,6 +16,7 @@ object ProjectBuild extends Build {
 
     resolvers ++= Seq(
       "play Repository" at "http://repo.typesafe.com/typesafe/simple/maven-releases/",
+      "scalaz-bintray" at "https://dl.bintray.com/scalaz/releases",
       Resolver.sonatypeRepo("releases"),
       Resolver.sonatypeRepo("snapshots")
     ),
