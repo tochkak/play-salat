@@ -6,7 +6,7 @@ object ProjectBuild extends Build {
   lazy val buildVersion =  "1.5.6"
 
   lazy val root = Project(id = "play-plugins-salat", base = file("."), settings = Project.defaultSettings ++ Publish.settings).settings(
-    organization := "se.radley",
+    organization := "cloudinsights",
     description := "MongoDB Salat plugin for PlayFramework 2",
     version := buildVersion,
     scalaVersion := "2.11.7",
@@ -15,6 +15,7 @@ object ProjectBuild extends Build {
     testFrameworks += TestFrameworks.Specs2,
 
     resolvers ++= Seq(
+      "scalaz-bintray" at "http://dl.bintray.com/scalaz/releases",
       "play Repository" at "http://repo.typesafe.com/typesafe/simple/maven-releases/",
       Resolver.sonatypeRepo("releases"),
       Resolver.sonatypeRepo("snapshots")
