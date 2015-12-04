@@ -44,17 +44,17 @@ object Publish {
     publishArtifact in Test := false,
     pomIncludeRepository := { _ => false },
     licenses := Seq("Apache 2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")),
-    homepage := Some(url("https://github.com/leon/play-salat")),
+    homepage := Some(url("https://github.com/cloudinsights/play-salat")),
     pomExtra := (
       <scm>
-        <url>git://github.com/leon/play-salat.git</url>
-        <connection>scm:git://github.com/leon/play-salat.git</connection>
+        <url>git://github.com/cloudinsights/play-salat.git</url>
+        <connection>scm:git://github.com/cloudinsights/play-salat.git</connection>
       </scm>
       <developers>
         <developer>
-          <id>leon</id>
-          <name>Leon Radley</name>
-          <url>http://github.com/leon</url>
+          <id>amarjitmult</id>
+          <name>Amarjit Singh</name>
+          <url>http://github.com/cloudinsights</url>
         </developer>
       </developers>)
   )

@@ -9,7 +9,7 @@ The plugin's functionality simpifies the use of salat by presenting a simple "pl
  * https://github.com/mongodb/casbah
  * https://github.com/novus/salat
 
-[![Build Status](https://secure.travis-ci.org/leon/play-salat.png)](http://travis-ci.org/leon/play-salat)
+[![Build Status](https://https://travis-ci.org/cloudinsights/play-salat.png)](http://https://travis-ci.org/cloudinsights/play-salat)
 
 ## Installation
 
