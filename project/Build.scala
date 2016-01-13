@@ -6,7 +6,7 @@ object ProjectBuild extends Build {
   lazy val buildVersion =  "1.5.9"
 
   lazy val root = Project(id = "play-plugins-salat", base = file("."), settings = Project.defaultSettings ++ Publish.settings).settings(
-    organization := "cloudinsights",
+    organization := "net.cloudinsights",
     description := "MongoDB Salat plugin for PlayFramework 2",
     version := buildVersion,
     scalaVersion := "2.11.7",
