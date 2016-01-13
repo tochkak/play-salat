@@ -3,7 +3,7 @@ import sbt.Keys._
 
 object ProjectBuild extends Build {
 
-  lazy val buildVersion =  "1.5.6"
+  lazy val buildVersion =  "1.5.9"
 
   lazy val root = Project(id = "play-plugins-salat", base = file("."), settings = Project.defaultSettings ++ Publish.settings).settings(
     organization := "cloudinsights",
@@ -22,9 +22,9 @@ object ProjectBuild extends Build {
     ),
 
     libraryDependencies ++= Seq(
-      "com.typesafe.play" %% "play" % "2.4.4" % "provided",
-      "com.typesafe.play" % "play-exceptions" % "2.4.4" % "provided",
-      "com.typesafe.play" %% "play-specs2" % "2.4.4" % "test",
+      "com.typesafe.play" %% "play" % "2.4.6" % "provided",
+      "com.typesafe.play" % "play-exceptions" % "2.4.6" % "provided",
+      "com.typesafe.play" %% "play-specs2" % "2.4.6" % "test",
       "com.novus" %% "salat" % "1.9.9",
       "org.mongodb" %% "casbah" % "2.8.2"
     )
