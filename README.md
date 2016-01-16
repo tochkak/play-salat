@@ -1,5 +1,5 @@
 # Disclaimer
-**This fork is compatible with Play 2.4.x. Update your Build.scala or build.sbt with my artifactId**
+**This is continuation of Leon's [play-salat plugin](https://github.com/leon/play-salat) for future versions of play and is comptabile with latest version of play 2.4.6. Update your Build.scala or build.sbt with my artifactId**
 
 # MongoDB Salat plugin for Play Framework 2
 Salat is a ORM for MongoDBs scala driver called Casbah.
@@ -9,7 +9,6 @@ The plugin's functionality simpifies the use of salat by presenting a simple "pl
  * https://github.com/mongodb/casbah
  * https://github.com/novus/salat
 
-[![Build Status](https://https://travis-ci.org/cloudinsights/play-salat.png)](http://https://travis-ci.org/cloudinsights/play-salat)
 
 ## Installation
 
