@@ -5,6 +5,7 @@ import play.Play
 import play.sbt.PlayImport._
 import play.twirl.sbt.Import._
 import play.sbt.routes.RoutesKeys
+import com.typesafe.sbteclipse.plugin.EclipsePlugin.EclipseKeys
 
 
 object ApplicationBuild extends Build {
@@ -23,7 +24,9 @@ object ApplicationBuild extends Build {
       libraryDependencies ++= appDependencies,
       RoutesKeys.routesImport += "se.radley.plugin.salat.Binders._",
       TwirlKeys.templateImports += "org.bson.types.ObjectId",
-      resolvers += Resolver.sonatypeRepo("snapshots")
+      resolvers += Resolver.sonatypeRepo("snapshots"),
+      EclipseKeys.withSource := true,
+      EclipseKeys.withJavadoc := true
     )
 
 }
