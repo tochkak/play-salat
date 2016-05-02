@@ -12,14 +12,15 @@ object Global extends GlobalSettings {
       User.save(User(
         username = "leon",
         password = "1234",
-        address = List(Address("Örebro", "123 45", "Sweden"),Address("Amsterdam", "1234", "The Netherlands"))
-      ))
+        address = List(
+          Address("Örebro", "123 45", "Sweden"),
+          Address("Amsterdam", "1234", "The Netherlands"))))
 
       User.save(User(
         username = "guillaume",
         password = "1234",
-        address = List(Address("Paris", "75000", "France"))
-      ))
+        address = List(
+          Address("Paris", "75000", "France"))))
     }
   }
 
