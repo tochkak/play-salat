@@ -31,7 +31,7 @@ class SalatPlugin @Inject() (implicit app: Application) extends Plugin {
           val maybe = for {
             u <- user
             p <- password
-          } yield MongoCredential.createMongoCRCredential(u, dbName, p.toArray)
+          } yield MongoCredential.createCredential(u, dbName, p.toArray)
 
           List(maybe).flatten
         }
