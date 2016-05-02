@@ -1,5 +1,5 @@
 # Disclaimer
-**This repo is not actively maintained and is looking for contributors.**
+**This is continuation of Leon's [play-salat plugin](https://github.com/leon/play-salat) for future versions of play and is comptabile with latest version of play 2.4.6. Update your Build.scala or build.sbt with my artifactId**
 
 # MongoDB Salat plugin for Play Framework 2
 Salat is a ORM for MongoDBs scala driver called Casbah.
@@ -9,7 +9,6 @@ The plugin's functionality simpifies the use of salat by presenting a simple "pl
  * https://github.com/mongodb/casbah
  * https://github.com/novus/salat
 
-[![Build Status](https://secure.travis-ci.org/leon/play-salat.png)](http://travis-ci.org/leon/play-salat)
 
 ## Installation
 
@@ -31,7 +30,7 @@ It will ask you a couple of questions, and your ready to rock 'n roll.
 Start by adding the plugin, in your `project/Build.scala`
 ````scala
 val appDependencies = Seq(
-  "se.radley" %% "play-plugins-salat" % "1.5.0"
+  "net.cloudinsights" %% "play-plugins-salat" % "1.5.9"
 )
 ````
 Then we can add the implicit converstions to and from ObjectId by adding to the routesImport and add ObjectId to all the templates

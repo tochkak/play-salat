@@ -3,10 +3,10 @@ import sbt.Keys._
 
 object ProjectBuild extends Build {
 
-  lazy val buildVersion =  "1.6.0"
+  lazy val buildVersion =  "1.5.9"
 
   lazy val root = Project(id = "play-plugins-salat", base = file("."), settings = Project.defaultSettings ++ Publish.settings).settings(
-    organization := "se.radley",
+    organization := "net.cloudinsights",
     description := "MongoDB Salat plugin for PlayFramework 2",
     version := buildVersion,
     scalaVersion := "2.11.7",
@@ -15,6 +15,7 @@ object ProjectBuild extends Build {
     testFrameworks += TestFrameworks.Specs2,
 
     resolvers ++= Seq(
+      "scalaz-bintray" at "http://dl.bintray.com/scalaz/releases",
       "play Repository" at "http://repo.typesafe.com/typesafe/simple/maven-releases/",
       "scalaz-bintray" at "https://dl.bintray.com/scalaz/releases",
       Resolver.sonatypeRepo("releases"),
@@ -22,9 +23,9 @@ object ProjectBuild extends Build {
     ),
 
     libraryDependencies ++= Seq(
-      "com.typesafe.play" %% "play" % "2.4.4" % "provided",
-      "com.typesafe.play" % "play-exceptions" % "2.4.4" % "provided",
-      "com.typesafe.play" %% "play-specs2" % "2.4.4" % "test",
+      "com.typesafe.play" %% "play" % "2.4.6" % "provided",
+      "com.typesafe.play" % "play-exceptions" % "2.4.6" % "provided",
+      "com.typesafe.play" %% "play-specs2" % "2.4.6" % "test",
       "com.novus" %% "salat" % "1.9.9",
       "org.mongodb" %% "casbah" % "2.8.2"
     )
@@ -45,17 +46,17 @@ object Publish {
     publishArtifact in Test := false,
     pomIncludeRepository := { _ => false },
     licenses := Seq("Apache 2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")),
-    homepage := Some(url("https://github.com/leon/play-salat")),
+    homepage := Some(url("https://github.com/cloudinsights/play-salat")),
     pomExtra := (
       <scm>
-        <url>git://github.com/leon/play-salat.git</url>
-        <connection>scm:git://github.com/leon/play-salat.git</connection>
+        <url>git://github.com/cloudinsights/play-salat.git</url>
+        <connection>scm:git://github.com/cloudinsights/play-salat.git</connection>
       </scm>
       <developers>
         <developer>
-          <id>leon</id>
-          <name>Leon Radley</name>
-          <url>http://github.com/leon</url>
+          <id>amarjitmult</id>
+          <name>Amarjit Singh</name>
+          <url>http://github.com/cloudinsights</url>
         </developer>
       </developers>)
   )
