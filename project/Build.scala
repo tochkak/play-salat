@@ -1,5 +1,6 @@
 import sbt._
 import sbt.Keys._
+import com.typesafe.sbteclipse.plugin.EclipsePlugin.EclipseKeys
 
 object ProjectBuild extends Build {
 
@@ -10,6 +11,8 @@ object ProjectBuild extends Build {
     description := "MongoDB Salat plugin for PlayFramework 2",
     version := buildVersion,
     scalaVersion := "2.11.7",
+    EclipseKeys.withSource := true,
+    EclipseKeys.withJavadoc := true,
     scalacOptions ++= Seq("-unchecked", "-deprecation", "-feature"),
     parallelExecution in Test := false,
     testFrameworks += TestFrameworks.Specs2,
