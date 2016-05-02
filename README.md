@@ -7,7 +7,7 @@ Salat is a ORM for MongoDBs scala driver called Casbah.
 The plugin's functionality simpifies the use of salat by presenting a simple "play style" configuration and binders for `ObjectId`
 
  * https://github.com/mongodb/casbah
- * https://github.com/novus/salat
+ * https://github.com/salat/salat
 
 
 ## Installation
