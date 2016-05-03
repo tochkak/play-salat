@@ -78,7 +78,7 @@ val appDependencies = Seq(
 
 Add the following line to the `conf/application.conf` file. This will enable the Play-Salat module and Guice will inject it.
 
-	play.modules.enabled  += "se.radley.plugin.salat.SalatModule"
+	play.modules.enabled  += "se.radley.plugin.salat.PlaySalatModule"
 
 ## Configuration
 now we need to setup our connections. The plugin is modeled after how plays DB plugin is built.
