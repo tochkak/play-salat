@@ -18,7 +18,7 @@ object Actions extends Results with BodyParsers {
         valid = { json =>
           action(json)
         },
-        invalid = (e => BadRequest(JsError.toFlatJson(e)).as("application/json"))
+        invalid = (e => BadRequest(JsError.toJson(e)).as("application/json"))
       )
     }
   }
