@@ -1,5 +1,6 @@
 package controllers
 
+import javax.inject._
 import play.api._
 import play.api.mvc._
 import models._
@@ -7,7 +8,8 @@ import se.radley.plugin.salat._
 import com.mongodb.casbah.Imports._
 import com.novus.salat._
 
-object Application extends Controller {
+@Singleton
+class Application @Inject() extends Controller {
 
   def list() = Action {
     val users = User.findAll

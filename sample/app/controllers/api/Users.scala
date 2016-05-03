@@ -1,5 +1,6 @@
 package controllers.api
 
+import javax.inject._
 import play.api.mvc._
 import play.api.libs.json._
 import models._
@@ -10,7 +11,8 @@ import se.radley.plugin.salat._
 import se.radley.plugin.salat.Binders._
 import mongoContext._
 
-object Users extends Controller {
+@Singleton
+class Users @Inject() extends Controller {
 
   def index(country: Option[String]) = Action {
     country match {
