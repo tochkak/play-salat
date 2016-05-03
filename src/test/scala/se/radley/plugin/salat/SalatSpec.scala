@@ -6,27 +6,28 @@ import play.api.mvc._
 import play.api.test._
 import play.api.test.Helpers._
 import java.io.File
-import play.api.Play.current
 import com.mongodb.casbah._
 import com.mongodb.ServerAddress
+import play.api.inject.guice.GuiceApplicationBuilder
+import play.api.inject.bind
+import scala.util.Try
 
 object SalatSpec extends Specification {
 
-  lazy val salatApp = FakeApplication(
-    additionalPlugins = Seq("se.radley.plugin.salat.SalatPlugin"))
+  lazy val salatAppBuilder = GuiceApplicationBuilder()
+    .bindings(bind[SalatComponent].to[SalatComponentImpl])
 
   "Salat Plugin with basic config" should {
 
-    lazy val app = salatApp.copy(
-      additionalConfiguration = Map(
-        ("mongodb.default.db" -> "salat-test"),
-        ("mongodb.default.writeconcern" -> "normal")))
+    lazy val app = salatAppBuilder.configure(Map(
+      ("mongodb.default.db" -> "salat-test"),
+      ("mongodb.default.writeconcern" -> "normal"))).build
 
-    lazy val salat = app.plugin[SalatPlugin].get
+    lazy val salat = app.injector.instanceOf[SalatComponent]
 
     running(app) {
       "start" in {
-        salat must beAnInstanceOf[SalatPlugin]
+        salat must beAnInstanceOf[SalatComponent]
       }
 
       "return a MongoCollection" in {
@@ -45,24 +46,23 @@ object SalatSpec extends Specification {
     }
 
     "be disabled if no configuration exists" in {
-      val app = FakeApplication(additionalPlugins = Seq("se.radley.plugin.salat.SalatPlugin"))
+      val app = GuiceApplicationBuilder().build
       running(app) {
-        app.plugin[SalatPlugin] must beNone
+        Try(app.injector.instanceOf[SalatComponent]) must beFailedTry
       }
     }
   }
 
   "Salat Plugin with uri config" should {
 
-    lazy val app = salatApp.copy(
-      additionalConfiguration = Map(
-        ("mongodb.default.uri" -> "mongodb://127.0.0.1:27017/salat-test")))
+    lazy val app = salatAppBuilder.configure(Map(
+      ("mongodb.default.uri" -> "mongodb://127.0.0.1:27017/salat-test"))).build
 
-    lazy val salat = app.plugin[SalatPlugin].get
+    lazy val salat = app.injector.instanceOf[SalatComponent]
 
     running(app) {
       "start" in {
-        salat must beAnInstanceOf[SalatPlugin]
+        salat must beAnInstanceOf[SalatComponent]
       }
 
       "return a MongoCollection" in {
@@ -71,7 +71,7 @@ object SalatSpec extends Specification {
       }
 
       "populate hosts from URI" in {
-        salat must beAnInstanceOf[SalatPlugin]
+        salat must beAnInstanceOf[SalatComponent]
         val source = salat.source("default")
         source.hosts must equalTo(List(new ServerAddress("127.0.0.1", 27017)))
       }
@@ -88,15 +88,14 @@ object SalatSpec extends Specification {
   }
 
   "Salat Plugin with multiple uri config" should {
-    lazy val app = salatApp.copy(
-      additionalConfiguration = Map(
-        ("mongodb.default.uri" -> "mongodb://127.0.0.1:27017,mongodb.org:1337/salat-test")))
+    lazy val app = salatAppBuilder.configure(Map(
+      ("mongodb.default.uri" -> "mongodb://127.0.0.1:27017,mongodb.org:1337/salat-test"))).build
 
-    lazy val salat = app.plugin[SalatPlugin].get
+    lazy val salat = app.injector.instanceOf[SalatComponent]
 
     running(app) {
       "start" in {
-        salat must beAnInstanceOf[SalatPlugin]
+        salat must beAnInstanceOf[SalatComponent]
       }
 
       "return a MongoCollection" in {
@@ -113,21 +112,17 @@ object SalatSpec extends Specification {
 
   "Salat Plugin with replicaset config" should {
 
-    lazy val app = FakeApplication(
-      additionalPlugins = Seq("se.radley.plugin.salat.SalatPlugin"),
-      additionalConfiguration = Map(
-        ("mongodb.default.db" -> "salat-test"),
-        ("mongodb.default.replicaset.host1.host" -> "10.0.0.1"),
-        ("mongodb.default.replicaset.host2.host" -> "10.0.0.2"),
-        ("mongodb.default.replicaset.host2.port" -> "27018")
-      )
-    )
+    lazy val app = salatAppBuilder.configure(Map(
+      ("mongodb.default.db" -> "salat-test"),
+      ("mongodb.default.replicaset.host1.host" -> "10.0.0.1"),
+      ("mongodb.default.replicaset.host2.host" -> "10.0.0.2"),
+      ("mongodb.default.replicaset.host2.port" -> "27018"))).build
 
-    lazy val salat = app.plugin[SalatPlugin].get
+    lazy val salat = app.injector.instanceOf[SalatComponent]
 
     running(app) {
       "start" in {
-        salat must beAnInstanceOf[SalatPlugin]
+        salat must beAnInstanceOf[SalatComponent]
       }
 
       "populate hosts from config" in {
@@ -139,17 +134,16 @@ object SalatSpec extends Specification {
 
   "Salat Plugin with options" should {
 
-    lazy val app = salatApp.copy(
-      additionalConfiguration = Map(
-        ("mongodb.default.db" -> "salat-with-options"),
-        ("mongodb.default.options.connectionsPerHost" -> "255"),
-        ("mongodb.default.options.threadsAllowedToBlockForConnectionMultiplier" -> "24")))
+    lazy val app = salatAppBuilder.configure(Map(
+      ("mongodb.default.db" -> "salat-with-options"),
+      ("mongodb.default.options.connectionsPerHost" -> "255"),
+      ("mongodb.default.options.threadsAllowedToBlockForConnectionMultiplier" -> "24"))).build
 
-    lazy val salat = app.plugin[SalatPlugin].get
+    lazy val salat = app.injector.instanceOf[SalatComponent]
 
     running(app) {
       "start" in {
-        salat must beAnInstanceOf[SalatPlugin]
+        salat must beAnInstanceOf[SalatComponent]
       }
 
       "return a MongoCollection" in {

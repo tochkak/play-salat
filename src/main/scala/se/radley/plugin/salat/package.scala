@@ -3,7 +3,7 @@ package se.radley.plugin
 import play.api._
 import com.mongodb.casbah.MongoCollection
 import com.mongodb.casbah.gridfs.GridFS
-import play.api.Play.current
+import scala.util.{ Try, Success, Failure }
 
 package object salat {
 
@@ -13,8 +13,14 @@ package object salat {
    * @param sourceName The configured source name
    * @return MongoCollection
    */
-  def mongoCollection(collectionName: String, sourceName:String = "default")(implicit app: Application): MongoCollection = {
-    app.plugin[SalatPlugin].map(_.collection(collectionName, sourceName)).getOrElse(throw new PlayException("SalatPlugin is not registered.", "You need to register the plugin with \"500:se.radley.plugin.salat.SalatPlugin\" in conf/play.plugins"))
+  def mongoCollection(
+    collectionName: String,
+    sourceName: String = "default")(implicit app: Application): MongoCollection = {
+    Try(app.injector.instanceOf[SalatComponent]) match {
+      case Success(salat) => salat.collection(collectionName, sourceName)
+      case Failure(ex) => throw new PlayException("SalatPlugin is not registered.",
+        "You need to register the plugin with \"play.modules.enabled  += \"se.radley.plugin.salat.SalatModule\"\" in conf/application.conf")
+    }
   }
 
   /**
@@ -25,8 +31,16 @@ package object salat {
    * @param sourceName The configured source name
    * @return MongoCollection
    */
-  def mongoCappedCollection(collectionName: String, size: Long, max: Option[Long] = None, sourceName:String = "default")(implicit app: Application): MongoCollection = {
-    app.plugin[SalatPlugin].map(_.cappedCollection(collectionName, size, max, sourceName)).getOrElse(throw new PlayException("SalatPlugin is not registered.", "You need to register the plugin with \"500:se.radley.plugin.salat.SalatPlugin\" in conf/play.plugins"))
+  def mongoCappedCollection(
+    collectionName: String,
+    size: Long,
+    max: Option[Long] = None,
+    sourceName: String = "default")(implicit app: Application): MongoCollection = {
+    Try(app.injector.instanceOf[SalatComponent]) match {
+      case Success(salat) => salat.cappedCollection(collectionName, size, max, sourceName)
+      case Failure(ex) => throw new PlayException("SalatPlugin is not registered.",
+        "You need to register the plugin with \"play.modules.enabled  += \"se.radley.plugin.salat.SalatModule\"\" in conf/application.conf")
+    }
   }
 
   /**
@@ -35,8 +49,14 @@ package object salat {
    * @param sourceName The configured source name
    * @return GridFS
    */
-  def gridFS(bucketName: String, sourceName:String = "default")(implicit app: Application): GridFS = {
-    app.plugin[SalatPlugin].map(_.gridFS(bucketName, sourceName)).getOrElse(throw new PlayException("SalatPlugin is not registered.", "You need to register the plugin with \"500:se.radley.plugin.salat.SalatPlugin\" in conf/play.plugins"))
+  def gridFS(
+    bucketName: String,
+    sourceName: String = "default")(implicit app: Application): GridFS = {
+    Try(app.injector.instanceOf[SalatComponent]) match {
+      case Success(salat) => salat.gridFS(bucketName, sourceName)
+      case Failure(ex) => throw new PlayException("SalatPlugin is not registered.",
+        "You need to register the plugin with \"play.modules.enabled  += \"se.radley.plugin.salat.SalatModule\"\" in conf/application.conf")
+    }
   }
 
 }
