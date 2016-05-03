@@ -35,7 +35,7 @@ val appDependencies = Seq(
 ````
 Then we can add the implicit converstions to and from ObjectId by adding to the routesImport and add ObjectId to all the templates
 
-**Play 2.2.x and previous**
+####Play 2.2.x and previous
 
 ````scala
 val main = PlayProject(appName, appVersion, appDependencies, mainLang = SCALA).settings(
@@ -43,7 +43,7 @@ val main = PlayProject(appName, appVersion, appDependencies, mainLang = SCALA).s
   templatesImport += "org.bson.types.ObjectId"
 )
 ````
-**Play 2.3.x and subsequent**
+####Play 2.3.x and subsequent
 
 ````scala
 import play.twirl.sbt.Import.TwirlKeys
@@ -53,16 +53,32 @@ val main = Project(appName, file(".")).enablePlugins(play.PlayScala).settings(
 )
 ````
 
-We now need to register the plugin, this is done by creating(or appending) to the `conf/play.plugins` file
-
-    500:se.radley.plugin.salat.SalatPlugin
-
 We continue to edit the `conf/application.conf` file. We need to disable some plugins that we don't need.
 Add these lines:
 
     dbplugin = disabled
     evolutionplugin = disabled
     ehcacheplugin = disabled
+    
+**Only for Play 2.3.x and 2.4.x**
+
+We now need to register the plugin, this is done by creating(or appending) to the `conf/play.plugins` file
+
+    500:se.radley.plugin.salat.SalatPlugin
+    
+**Only for Play 2.5.x+**
+
+Use version `1.6.0` that provides Play-Salat __not__ as a _plugin_ but as a _Guicable module_.
+
+````scala
+val appDependencies = Seq(
+  "net.cloudinsights" %% "play-plugins-salat" % "1.6.0"
+)
+````
+
+Add the following line to the `conf/application.conf` file. This will enable the Play-Salat module and Guice will inject it.
+
+	play.modules.enabled  += "se.radley.plugin.salat.SalatModule"
 
 ## Configuration
 now we need to setup our connections. The plugin is modeled after how plays DB plugin is built.
