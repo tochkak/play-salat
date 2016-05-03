@@ -1,6 +1,5 @@
 package models
 
-import play.api.Play.current
 import java.util.Date
 import com.novus.salat._
 import com.novus.salat.annotations._
@@ -8,10 +7,9 @@ import com.novus.salat.dao._
 import com.mongodb.casbah.Imports._
 import play.api.libs.json._
 import play.api.libs.functional.syntax._
-
-import se.radley.plugin.salat._
 import se.radley.plugin.salat.Binders._
-import mongoContext._
+import se.radley.plugin.salat.PlaySalat
+import javax.inject._
 
 case class User(
   id: ObjectId = new ObjectId,
@@ -22,14 +20,17 @@ case class User(
   updated: Option[Date] = None,
   @Key("company_id") company: Option[ObjectId] = None)
 
-object User extends UserDAO with UserJson
+object User extends UserJson
 
-trait UserDAO extends ModelCompanion[User, ObjectId] {
-  def collection = mongoCollection("users")
+@Singleton
+class UserDAO @Inject() (playSalat: PlaySalat, mongoContext: MongoContext) extends ModelCompanion[User, ObjectId] {
+  import mongoContext._
+
+  def collection = playSalat.collection("users")
   val dao = new SalatDAO[User, ObjectId](collection) {}
 
   // Indexes
-  collection.ensureIndex(DBObject("username" -> 1), "user_email", unique = true)
+  collection.createIndex(DBObject("username" -> 1), DBObject("name" -> "user_email", "unique" -> true))
 
   // Queries
   def findOneByUsername(username: String): Option[User] =
