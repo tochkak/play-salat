@@ -15,7 +15,7 @@ import scala.util.Try
 object SalatSpec extends Specification {
 
   lazy val salatAppBuilder = GuiceApplicationBuilder()
-    .bindings(bind[SalatComponent].to[SalatComponentImpl])
+    .bindings(bind[PlaySalat].to[PlaySalatImpl])
 
   "Salat Plugin with basic config" should {
 
@@ -23,11 +23,11 @@ object SalatSpec extends Specification {
       ("mongodb.default.db" -> "salat-test"),
       ("mongodb.default.writeconcern" -> "normal"))).build
 
-    lazy val salat = app.injector.instanceOf[SalatComponent]
+    lazy val salat = app.injector.instanceOf[PlaySalat]
 
     running(app) {
       "start" in {
-        salat must beAnInstanceOf[SalatComponent]
+        salat must beAnInstanceOf[PlaySalat]
       }
 
       "return a MongoCollection" in {
@@ -48,7 +48,7 @@ object SalatSpec extends Specification {
     "be disabled if no configuration exists" in {
       val app = GuiceApplicationBuilder().build
       running(app) {
-        Try(app.injector.instanceOf[SalatComponent]) must beFailedTry
+        Try(app.injector.instanceOf[PlaySalat]) must beFailedTry
       }
     }
   }
@@ -58,11 +58,11 @@ object SalatSpec extends Specification {
     lazy val app = salatAppBuilder.configure(Map(
       ("mongodb.default.uri" -> "mongodb://127.0.0.1:27017/salat-test"))).build
 
-    lazy val salat = app.injector.instanceOf[SalatComponent]
+    lazy val salat = app.injector.instanceOf[PlaySalat]
 
     running(app) {
       "start" in {
-        salat must beAnInstanceOf[SalatComponent]
+        salat must beAnInstanceOf[PlaySalat]
       }
 
       "return a MongoCollection" in {
@@ -71,7 +71,7 @@ object SalatSpec extends Specification {
       }
 
       "populate hosts from URI" in {
-        salat must beAnInstanceOf[SalatComponent]
+        salat must beAnInstanceOf[PlaySalat]
         val source = salat.source("default")
         source.hosts must equalTo(List(new ServerAddress("127.0.0.1", 27017)))
       }
@@ -91,11 +91,11 @@ object SalatSpec extends Specification {
     lazy val app = salatAppBuilder.configure(Map(
       ("mongodb.default.uri" -> "mongodb://127.0.0.1:27017,mongodb.org:1337/salat-test"))).build
 
-    lazy val salat = app.injector.instanceOf[SalatComponent]
+    lazy val salat = app.injector.instanceOf[PlaySalat]
 
     running(app) {
       "start" in {
-        salat must beAnInstanceOf[SalatComponent]
+        salat must beAnInstanceOf[PlaySalat]
       }
 
       "return a MongoCollection" in {
@@ -118,11 +118,11 @@ object SalatSpec extends Specification {
       ("mongodb.default.replicaset.host2.host" -> "10.0.0.2"),
       ("mongodb.default.replicaset.host2.port" -> "27018"))).build
 
-    lazy val salat = app.injector.instanceOf[SalatComponent]
+    lazy val salat = app.injector.instanceOf[PlaySalat]
 
     running(app) {
       "start" in {
-        salat must beAnInstanceOf[SalatComponent]
+        salat must beAnInstanceOf[PlaySalat]
       }
 
       "populate hosts from config" in {
@@ -139,11 +139,11 @@ object SalatSpec extends Specification {
       ("mongodb.default.options.connectionsPerHost" -> "255"),
       ("mongodb.default.options.threadsAllowedToBlockForConnectionMultiplier" -> "24"))).build
 
-    lazy val salat = app.injector.instanceOf[SalatComponent]
+    lazy val salat = app.injector.instanceOf[PlaySalat]
 
     running(app) {
       "start" in {
-        salat must beAnInstanceOf[SalatComponent]
+        salat must beAnInstanceOf[PlaySalat]
       }
 
       "return a MongoCollection" in {

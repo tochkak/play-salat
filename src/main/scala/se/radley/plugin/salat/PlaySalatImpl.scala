@@ -8,12 +8,12 @@ import com.mongodb.{ MongoClientOptions, MongoException, ServerAddress, MongoOpt
 import com.mongodb.casbah.gridfs.GridFS
 import scala.concurrent.Future
 
-class SalatComponentImpl @Inject() (lifecycle: ApplicationLifecycle, implicit val app: Application)
-    extends SalatComponent {
+class PlaySalatImpl @Inject() (lifecycle: ApplicationLifecycle, environment: Environment, config: Configuration)
+    extends PlaySalat {
 
   // previous content of Plugin.onStart
   sources.map { source =>
-    app.mode match {
+    environment.mode match {
       case Mode.Test =>
       case _ => {
         try {
@@ -36,13 +36,13 @@ class SalatComponentImpl @Inject() (lifecycle: ApplicationLifecycle, implicit va
     // previous contents of Plugin.onStop
     sources.map { source =>
       // @fix See if we can get around the plugin closing connections in testmode
-      if (app.mode != Mode.Test)
+      if (environment.mode != Mode.Test)
         source._2.reset()
     }
     Future.successful(())
   }
 
-  lazy val configuration = app.configuration.getConfig("mongodb").getOrElse(Configuration.empty)
+  lazy val configuration = config.getConfig("mongodb").getOrElse(Configuration.empty)
 
   lazy val sources: Map[String, MongoSource] = configuration.subKeys.map { sourceKey =>
     val source = configuration.getConfig(sourceKey).getOrElse(Configuration.empty)

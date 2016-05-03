@@ -7,7 +7,7 @@ import com.mongodb.casbah.gridfs.GridFS
 import commons.MongoDBObject
 import scala.util.Try
 
-trait SalatComponent {
+trait PlaySalat {
   val configuration: Configuration
 
   case class MongoSource(
