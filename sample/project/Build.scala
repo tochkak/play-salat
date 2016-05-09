@@ -13,7 +13,7 @@ object ApplicationBuild extends Build {
 
   val appDependencies = Seq(
     "com.typesafe.play" %% "play-ws" % "2.5.3",
-    "net.cloudinsights" %% "play-plugins-salat" % "1.6.0")
+    "com.github.shayanlinux" %% "play-plugins-salat" % "1.6.0")
 
   val main = Project(appName, file(".")).enablePlugins(PlayScala).settings(
     version := appVersion,
