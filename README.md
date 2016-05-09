@@ -115,42 +115,105 @@ If you would like to connect to two databases you need to create two source name
     mongodb.myotherdb.db = "otherdb"
     mongodb.myotherdb.options.connectionsPerHost = 80
 
-Then you can call `mongoCollection("collectionname", "myotherdb")`
+Then you can call `playSalat.collection("collectionname", "myotherdb")`
 
 ## What a model looks like
 All models must be case classes otherwise salat doesn't know how to properly transform them into MongoDBObject's
+
 ````scala
 package models
 
-import play.api.Play.current
 import java.util.Date
-import com.novus.salat._
 import com.novus.salat.annotations._
-import com.novus.salat.dao._
-import com.mongodb.casbah.Imports._
-import se.radley.plugin.salat._
-import mongoContext._
+import play.api.libs.json._
+import play.api.libs.functional.syntax._
+import se.radley.plugin.salat.Binders._
 
 case class User(
   id: ObjectId = new ObjectId,
   username: String,
   password: String,
-  address: Option[Address] = None,
+  address: List[Address] = Nil,
   added: Date = new Date(),
   updated: Option[Date] = None,
-  deleted: Option[Date] = None,
-  @Key("company_id")company: Option[ObjectId] = None
-)
+  @Key("company_id") company: Option[ObjectId] = None)
+````
 
-object User extends ModelCompanion[User, ObjectId] {
-  val dao = new SalatDAO[User, ObjectId](collection = mongoCollection("users")) {}
+## Dependency Injection
 
-  def findOneByUsername(username: String): Option[User] = dao.findOne(MongoDBObject("username" -> username))
-  def findByCountry(country: String) = dao.find(MongoDBObject("address.country" -> country))
+Modules managed by the _Guice dependency injection framework_ are declared like this:
+
+````scala
+import com.google.inject.AbstractModule
+import services.{ UserDAO, MongoContext }
+
+class Module extends AbstractModule {
+
+  override def configure() = {
+    bind(classOf[MongoContext])
+    bind(classOf[UserDAO])
+  }
 }
 ````
+
+## Collections
+
+A _Salat Mongo Context_ is typically implemented like this:
+
+````scala
+package services
+
+import javax.inject._
+import com.novus.salat.{ TypeHintFrequency, StringTypeHintStrategy, Context }
+import play.api.Environment
+
+@Singleton
+class MongoContext @Inject() (environment: Environment) {
+
+  implicit val context = {
+    val context = new Context {
+      val name = "global"
+      override val typeHintStrategy = StringTypeHintStrategy(when = TypeHintFrequency.WhenNecessary, typeHint = "_t")
+    }
+    context.registerGlobalKeyOverride(remapThis = "id", toThisInstead = "_id")
+    context.registerClassLoader(environment.classLoader)
+    context
+  }
+}
+````
+
+A DAO to a collection with _Salat Mongo Context_ and _Play Salat Plugin_ injected is implemented like this:
+
+````scala
+package services
+
+import javax.inject._
+import com.novus.salat.dao._
+import com.mongodb.casbah.Imports._
+import se.radley.plugin.salat.PlaySalat
+import models.User
+
+@Singleton
+class UserDAO @Inject() (playSalat: PlaySalat, mongoContext: MongoContext) extends ModelCompanion[User, ObjectId] {
+  import mongoContext._
+
+  def collection = playSalat.collection("users")
+  val dao = new SalatDAO[User, ObjectId](collection) {}
+
+  // Queries
+  def findOneByUsername(username: String): Option[User] =
+    dao.findOne(MongoDBObject("username" -> username))
+
+  def findByCountry(country: String) =
+    dao.find(MongoDBObject("address.country" -> country))
+}
+````
+
 ## Capped Collections
+__TODO__ adjust the example to use dependency injection.
+
 If you want to use capped collections check this out
+
 ````scala
 package models
 
@@ -172,8 +235,12 @@ object LogItem extends ModelCompanion[LogItem, ObjectId] {
   val dao = new SalatDAO[LogItem, ObjectId](collection = mongoCappedCollection("logitems", 1000)) {}
 }
 ````
+
 ## GridFS
+__TODO__ adjust the example to use dependency injection.
+
 If you want to store things in gridfs you can do this
+
 ````
 package models
 
@@ -183,6 +250,7 @@ import mongoContext._
 
 val files = gridFS("myfiles")
 ````
+
 ## Mongo Context
 All models must contain an implicit salat Context. The context is somewhat like a hibernate dialect.
 You can override mapping names and configure how salat does it's type hinting. read more about it [here](https://github.com/salat/salat/wiki/CustomContext)
