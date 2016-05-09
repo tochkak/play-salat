@@ -2,7 +2,7 @@ import javax.inject._
 import com.mongodb.casbah.Imports._
 import play.api._
 import models._
-import se.radley.plugin.salat._
+import services.UserDAO
 
 @Singleton
 class InitializeDatabase @Inject() (userDAO: UserDAO) {

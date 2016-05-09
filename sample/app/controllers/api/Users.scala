@@ -4,10 +4,10 @@ import javax.inject._
 import play.api.mvc._
 import play.api.libs.json._
 import models._
+import services.UserDAO
 import controllers.Actions._
 
 import com.mongodb.casbah.WriteConcern
-import se.radley.plugin.salat._
 import se.radley.plugin.salat.Binders._
 
 @Singleton

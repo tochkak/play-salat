@@ -1,9 +1,6 @@
-package models
+package services
 
 import javax.inject._
-import com.novus.salat.dao._
-import com.novus.salat.annotations._
-import com.mongodb.casbah.Imports._
 import com.novus.salat.{ TypeHintFrequency, StringTypeHintStrategy, Context }
 import play.api.Environment
 
