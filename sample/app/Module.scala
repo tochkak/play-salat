@@ -1,5 +1,5 @@
 import com.google.inject.AbstractModule
-import services.{ UserDAO, MongoContext }
+import services._
 
 class Module extends AbstractModule {
 
@@ -7,6 +7,7 @@ class Module extends AbstractModule {
 
     bind(classOf[MongoContext])
     bind(classOf[UserDAO])
+    bind(classOf[LogItemDAO])
     bind(classOf[InitializeDatabase]).asEagerSingleton
 
   }

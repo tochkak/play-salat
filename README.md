@@ -210,29 +210,41 @@ class UserDAO @Inject() (playSalat: PlaySalat, mongoContext: MongoContext) exten
 ````
 
 ## Capped Collections
-__TODO__ adjust the example to use dependency injection.
 
-If you want to use capped collections check this out
+If you want to use capped collections check this out.
+
+Model:
 
 ````scala
 package models
 
-import play.api.Play.current
 import java.util.Date
-import com.novus.salat._
-import com.novus.salat.annotations._
-import com.novus.salat.dao._
 import com.mongodb.casbah.Imports._
-import se.radley.plugin.salat._
-import mongoContext._
 
 case class LogItem(
   id: ObjectId = new ObjectId,
-  message: String
-)
+  message: String)
+````
 
-object LogItem extends ModelCompanion[LogItem, ObjectId] {
-  val dao = new SalatDAO[LogItem, ObjectId](collection = mongoCappedCollection("logitems", 1000)) {}
+DAO (also remember to register it in the _Module_ class):
+
+````scala
+package services
+
+import javax.inject._
+import com.novus.salat.dao._
+import com.mongodb.casbah.Imports._
+import se.radley.plugin.salat.PlaySalat
+import models.LogItem
+
+@Singleton
+class LogItemDAO @Inject() (playSalat: PlaySalat, mongoContext: MongoContext) extends ModelCompanion[LogItem, ObjectId] {
+  import mongoContext._
+
+  val collection = playSalat.cappedCollection("logitems",
+    1048576, // max size is 1 MB = 10485760 bytes
+    Some(10)) // max number of documents = 10
+  val dao = new SalatDAO[LogItem, ObjectId](collection) {}
 }
 ````
 

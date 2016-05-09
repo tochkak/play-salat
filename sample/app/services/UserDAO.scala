@@ -10,7 +10,7 @@ import models.{ Address, User }
 class UserDAO @Inject() (playSalat: PlaySalat, mongoContext: MongoContext) extends ModelCompanion[User, ObjectId] {
   import mongoContext._
 
-  def collection = playSalat.collection("users")
+  val collection = playSalat.collection("users")
   val dao = new SalatDAO[User, ObjectId](collection) {}
 
   // Indexes
