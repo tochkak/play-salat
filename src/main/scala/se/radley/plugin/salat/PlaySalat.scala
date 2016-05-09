@@ -8,7 +8,7 @@ import commons.MongoDBObject
 import scala.util.Try
 
 trait PlaySalat {
-  val configuration: Configuration
+  protected val configuration: Configuration
 
   case class MongoSource(
       val hosts: List[ServerAddress],
@@ -76,7 +76,7 @@ trait PlaySalat {
     }
   }
 
-  val sources: Map[String, MongoSource]
+  protected val sources: Map[String, MongoSource]
 
   /**
    * Returns the MongoSource that has been configured in application.conf

@@ -42,9 +42,9 @@ class PlaySalatImpl @Inject() (lifecycle: ApplicationLifecycle, environment: Env
     Future.successful(())
   }
 
-  lazy val configuration = config.getConfig("mongodb").getOrElse(Configuration.empty)
+  protected lazy val configuration = config.getConfig("mongodb").getOrElse(Configuration.empty)
 
-  lazy val sources: Map[String, MongoSource] = configuration.subKeys.map { sourceKey =>
+  protected lazy val sources: Map[String, MongoSource] = configuration.subKeys.map { sourceKey =>
     val source = configuration.getConfig(sourceKey).getOrElse(Configuration.empty)
     val options: Option[MongoClientOptions] = source.getConfig("options").flatMap(opts =>
       OptionsFromConfig(opts))
