@@ -10,7 +10,7 @@ object ProjectBuild extends Build {
   lazy val root = Project(id = "play-plugins-salat",
     base = file("."),
     settings = Project.defaultSettings ++ Publish.settings).settings(
-      organization := "net.cloudinsights",
+      organization := "com.github.shayanlinux",
       description := "MongoDB Salat plugin for PlayFramework 2",
       version := buildVersion,
       scalaVersion := "2.11.7",
@@ -47,17 +47,17 @@ object Publish {
     publishArtifact in Test := false,
     pomIncludeRepository := { _ => false },
     licenses := Seq("Apache 2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")),
-    homepage := Some(url("https://github.com/cloudinsights/play-salat")),
+    homepage := Some(url("https://github.com/shayanlinux/play-salat")),
     pomExtra := (
       <scm>
-        <url>git://github.com/cloudinsights/play-salat.git</url>
-        <connection>scm:git://github.com/cloudinsights/play-salat.git</connection>
+        <url>git://github.com/shayanlinux/play-salat.git</url>
+        <connection>scm:git://github.com/shayanlinux/play-salat.git</connection>
       </scm>
       <developers>
         <developer>
-          <id>amarjitmult</id>
-          <name>Amarjit Singh</name>
-          <url>http://github.com/cloudinsights</url>
+          <id>shayanlinux</id>
+          <name>Shayan Shahand</name>
+          <url>http://github.com/shayanlinux</url>
         </developer>
       </developers>))
 }

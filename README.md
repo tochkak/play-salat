@@ -1,5 +1,5 @@
 # Disclaimer
-**This is continuation of Leon's [play-salat plugin](https://github.com/leon/play-salat) for future versions of play and is comptabile with latest version of play 2.4.6. Update your Build.scala or build.sbt with my artifactId**
+**This is continuation of Leon's [play-salat plugin](https://github.com/leon/play-salat) for future versions of Play and is comptabile with latest version of play 2.5.3. Compatibility with earlier versions is not checked, please use older artifacts for older versions of Play Framework. Update your Build.scala or build.sbt with artifactId mentioned below.**
 
 # MongoDB Salat plugin for Play Framework 2
 Salat is a ORM for MongoDBs scala driver called Casbah.
@@ -12,37 +12,14 @@ The plugin's functionality simpifies the use of salat by presenting a simple "pl
 
 ## Installation
 
-Use g8 to start a new salat enabled play project
-
-### Install g8 on OSX using homebrew
-
-    brew update && brew install giter8
-
-Or read about the other ways to install [giter8 here](https://github.com/n8han/giter8)
-
-Then run
-
-    g8 leon/play-salat.g8
-
-It will ask you a couple of questions, and your ready to rock 'n roll.
-
-### Manual installation
 Start by adding the plugin, in your `project/Build.scala`
 ````scala
 val appDependencies = Seq(
-  "net.cloudinsights" %% "play-plugins-salat" % "1.5.9"
+  "com.github.shayanlinux" %% "play-plugins-salat" % "1.6.0"
 )
 ````
 Then we can add the implicit converstions to and from ObjectId by adding to the routesImport and add ObjectId to all the templates
 
-####Play 2.2.x and previous
-
-````scala
-val main = PlayProject(appName, appVersion, appDependencies, mainLang = SCALA).settings(
-  routesImport += "se.radley.plugin.salat.Binders._",
-  templatesImport += "org.bson.types.ObjectId"
-)
-````
 ####Play 2.3.x and subsequent
 
 ````scala
@@ -72,7 +49,7 @@ Use version `1.6.0` that provides Play-Salat __not__ as a _plugin_ but as a _Gui
 
 ````scala
 val appDependencies = Seq(
-  "net.cloudinsights" %% "play-plugins-salat" % "1.6.0"
+  "com.github.shayanlinux" %% "play-plugins-salat" % "1.6.0"
 )
 ````
 
@@ -208,7 +185,7 @@ val files = gridFS("myfiles")
 ````
 ## Mongo Context
 All models must contain an implicit salat Context. The context is somewhat like a hibernate dialect.
-You can override mapping names and configure how salat does it's type hinting. read more about it [here](https://github.com/novus/salat/wiki/CustomContext)
+You can override mapping names and configure how salat does it's type hinting. read more about it [here](https://github.com/salat/salat/wiki/CustomContext)
 
 In the sample there is a custom `mongoContext`, partly because we need to add plays classloader to salat so it knows when to reload it's graters,
 but also so we can override all models id fields to be serialized to MongoDB's _id.

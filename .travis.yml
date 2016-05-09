@@ -12,9 +12,7 @@ branches:
     - master
 
 notifications:
-  email:
-  recipients:
-      - amarjit@cloudinsights.net
+  email: false
 
 services:
   - mongodb
