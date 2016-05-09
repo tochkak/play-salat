@@ -1,6 +1,6 @@
 package se.radley.plugin.salat
 
-import javax.inject.Inject
+import javax.inject._
 import play.api._
 import play.api.inject.ApplicationLifecycle
 import com.mongodb.casbah._
@@ -8,6 +8,7 @@ import com.mongodb.{ MongoClientOptions, MongoException, ServerAddress, MongoOpt
 import com.mongodb.casbah.gridfs.GridFS
 import scala.concurrent.Future
 
+@Singleton
 class PlaySalatImpl @Inject() (lifecycle: ApplicationLifecycle, environment: Environment, config: Configuration)
     extends PlaySalat {
 
