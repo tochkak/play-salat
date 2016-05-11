@@ -9,6 +9,8 @@ The plugin's functionality simpifies the use of salat by presenting a simple "pl
  * https://github.com/mongodb/casbah
  * https://github.com/salat/salat
 
+ [![Build Status](https://travis-ci.org/shayanlinux/play-salat.svg?branch=master)](https://travis-ci.org/shayanlinux/play-salat)
+
 
 ## Installation
 
