@@ -270,7 +270,7 @@ You can override mapping names and configure how salat does it's type hinting. r
 In the sample there is a custom `mongoContext`, partly because we need to add plays classloader to salat so it knows when to reload it's graters,
 but also so we can override all models id fields to be serialized to MongoDB's _id.
 
-- [Sample](https://github.com/leon/play-salat/tree/master/sample)
+- [Sample](https://github.com/shayanlinux/play-salat/tree/master/sample)
 
 ## Enums?
 If you're using Scala Enumerations have a look at my play-enumeration project.
