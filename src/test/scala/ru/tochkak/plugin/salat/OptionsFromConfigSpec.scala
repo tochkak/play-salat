@@ -1,4 +1,4 @@
-package se.radley.plugin.salat
+package ru.tochkak.plugin.salat
 
 import org.specs2.mutable.Specification
 import com.mongodb._

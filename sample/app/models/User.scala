@@ -4,7 +4,6 @@ import java.util.Date
 import com.novus.salat.annotations._
 import play.api.libs.json._
 import play.api.libs.functional.syntax._
-import se.radley.plugin.salat.Binders._
 
 case class User(
   id: ObjectId = new ObjectId,

@@ -1,37 +1,39 @@
-import sbt._
-import sbt.Keys._
 import com.typesafe.sbteclipse.plugin.EclipsePlugin.EclipseKeys
+import sbt.Keys._
+import sbt._
 
 object ProjectBuild extends Build {
 
-  lazy val buildVersion = "1.6.0"
-  lazy val playVersion = "2.5.3"
+  lazy val buildVersion = "1.7.0"
+  lazy val playVersion  = "2.5.15"
 
   lazy val root = Project(id = "play-plugins-salat",
     base = file("."),
-    settings = Project.defaultSettings ++ Publish.settings).settings(
-      organization := "com.github.shayanlinux",
-      description := "MongoDB Salat plugin for PlayFramework 2",
-      version := buildVersion,
-      scalaVersion := "2.11.7",
-      EclipseKeys.withSource := true,
-      EclipseKeys.withJavadoc := true,
-      scalacOptions ++= Seq("-unchecked", "-deprecation", "-feature"),
-      parallelExecution in Test := false,
-      testFrameworks += TestFrameworks.Specs2,
+    settings = Defaults.coreDefaultSettings ++ Publish.settings).settings(
+    organization := "com.github.shayanlinux",
+    description := "MongoDB Salat plugin for PlayFramework 2",
+    version := buildVersion,
+    scalaVersion := "2.11.7",
+    EclipseKeys.withSource := true,
+    EclipseKeys.withJavadoc := true,
+    scalacOptions ++= Seq("-unchecked", "-deprecation", "-feature"),
+    parallelExecution in Test := false,
+    testFrameworks += TestFrameworks.Specs2,
 
-      resolvers ++= Seq(
-        "scalaz-bintray" at "http://dl.bintray.com/scalaz/releases",
-        "play Repository" at "http://repo.typesafe.com/typesafe/simple/maven-releases/",
-        Resolver.sonatypeRepo("releases"),
-        Resolver.sonatypeRepo("snapshots")),
+    resolvers ++= Seq(
+      "scalaz-bintray" at "http://dl.bintray.com/scalaz/releases",
+      "play Repository" at "http://repo.typesafe.com/typesafe/simple/maven-releases/",
+      Resolver.sonatypeRepo("releases"),
+      Resolver.sonatypeRepo("snapshots")),
 
-      libraryDependencies ++= Seq(
-        "com.typesafe.play" %% "play" % playVersion % "provided",
-        "com.typesafe.play" % "play-exceptions" % playVersion % "provided",
-        "com.typesafe.play" %% "play-specs2" % playVersion % "test",
-        "com.novus" %% "salat" % "1.9.9",
-        "org.mongodb" %% "casbah" % "2.8.2"))
+    libraryDependencies ++= Seq(
+      "com.typesafe.play" %% "play" % playVersion % "provided",
+      "com.typesafe.play" % "play-exceptions" % playVersion % "provided",
+      "com.typesafe.play" %% "play-specs2" % playVersion % "test",
+      "com.github.salat" %% "salat" % "1.11.0",
+      "org.mongodb" %% "casbah" % "3.1.1"
+    )
+  )
 }
 
 object Publish {
@@ -53,11 +55,11 @@ object Publish {
         <url>git://github.com/shayanlinux/play-salat.git</url>
         <connection>scm:git://github.com/shayanlinux/play-salat.git</connection>
       </scm>
-      <developers>
-        <developer>
-          <id>shayanlinux</id>
-          <name>Shayan Shahand</name>
-          <url>http://github.com/shayanlinux</url>
-        </developer>
-      </developers>))
+        <developers>
+          <developer>
+            <id>shayanlinux</id>
+            <name>Shayan Shahand</name>
+            <url>http://github.com/shayanlinux</url>
+          </developer>
+        </developers>))
 }
