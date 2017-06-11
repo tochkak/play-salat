@@ -1,4 +1,4 @@
-package se.radley.plugin.salat
+package ru.tochkak.plugin.salat
 
 import play.api.data._
 import play.api.data.format._

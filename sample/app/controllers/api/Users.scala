@@ -8,7 +8,6 @@ import services.UserDAO
 import controllers.Actions._
 
 import com.mongodb.casbah.WriteConcern
-import se.radley.plugin.salat.Binders._
 
 @Singleton
 class Users @Inject() (userDAO: UserDAO) extends Controller {

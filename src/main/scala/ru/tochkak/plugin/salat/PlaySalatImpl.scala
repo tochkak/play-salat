@@ -1,22 +1,27 @@
-package se.radley.plugin.salat
+package ru.tochkak.plugin.salat
 
 import javax.inject._
+
+import com.mongodb.casbah._
+import com.mongodb.casbah.gridfs.GridFS
+import com.mongodb.{MongoClientOptions, MongoException, ServerAddress}
 import play.api._
 import play.api.inject.ApplicationLifecycle
-import com.mongodb.casbah._
-import com.mongodb.{ MongoClientOptions, MongoException, ServerAddress, MongoOptions }
-import com.mongodb.casbah.gridfs.GridFS
+
 import scala.concurrent.Future
 
 @Singleton
-class PlaySalatImpl @Inject() (lifecycle: ApplicationLifecycle, environment: Environment, config: Configuration)
-    extends PlaySalat {
+class PlaySalatImpl @Inject()(
+  lifecycle: ApplicationLifecycle,
+  environment: Environment,
+  config: Configuration
+) extends PlaySalat {
 
   // previous content of Plugin.onStart
   sources.map { source =>
     environment.mode match {
       case Mode.Test =>
-      case _ => {
+      case _ =>
         try {
           source._2.connection(source._2.dbName).getCollectionNames()
         } catch {
@@ -29,17 +34,18 @@ class PlaySalatImpl @Inject() (lifecycle: ApplicationLifecycle, environment: Env
         } finally {
           Logger("play").info("mongodb [" + source._1 + "] connected at " + source._2)
         }
-      }
     }
   }
 
   lifecycle.addStopHook { () =>
     // previous contents of Plugin.onStop
-    sources.map { source =>
+    sources.foreach { source =>
       // @fix See if we can get around the plugin closing connections in testmode
-      if (environment.mode != Mode.Test)
+      if (environment.mode != Mode.Test) {
         source._2.reset()
+      }
     }
+
     Future.successful(())
   }
 
@@ -109,51 +115,52 @@ class PlaySalatImpl @Inject() (lifecycle: ApplicationLifecycle, environment: Env
   }.toMap
 
   /**
-   * Returns the MongoSource that has been configured in application.conf
-   * @param source The source name ex. default
-   * @return A MongoSource
-   */
+    * Returns the MongoSource that has been configured in application.conf
+    * @param source The source name ex. default
+    * @return A MongoSource
+    */
   def source(source: String): MongoSource = {
-    sources.get(source).getOrElse(
-      throw configuration.reportError("mongodb." + source, source + " doesn't exist"))
+    sources.getOrElse(source, throw configuration.reportError("mongodb." + source, source + " doesn't exist"))
   }
 
   /**
-   * Returns MongoDB for configured source
-   * @param sourceName The source name ex. default
-   * @return A MongoDB
-   */
+    * Returns MongoDB for configured source
+    * @param sourceName The source name ex. default
+    * @return A MongoDB
+    */
   def db(sourceName: String = "default"): MongoDB = source(sourceName).db
 
   /**
-   * Returns MongoCollection that has been configured in application.conf
-   * @param collectionName The MongoDB collection name
-   * @param sourceName The source name ex. default
-   * @return A MongoCollection
-   */
+    * Returns MongoCollection that has been configured in application.conf
+    * @param collectionName The MongoDB collection name
+    * @param sourceName The source name ex. default
+    * @return A MongoCollection
+    */
   def collection(collectionName: String, sourceName: String = "default"): MongoCollection =
     source(sourceName).collection(collectionName)
 
   /**
-   * Returns Capped MongoCollection that has been configured in application.conf
-   * @param collectionName The MongoDB collection name
-   * @param size The capped collection size
-   * @param max The capped collection max number of documents
-   * @param sourceName The source name ex. default
-   * @return A MongoCollection
-   */
-  def cappedCollection(collectionName: String,
-                       size: Long,
-                       max: Option[Long] = None,
-                       sourceName: String = "default"): MongoCollection =
+    * Returns Capped MongoCollection that has been configured in application.conf
+    * @param collectionName The MongoDB collection name
+    * @param size The capped collection size
+    * @param max The capped collection max number of documents
+    * @param sourceName The source name ex. default
+    * @return A MongoCollection
+    */
+  def cappedCollection(
+    collectionName: String,
+    size: Long,
+    max: Option[Long] = None,
+    sourceName: String = "default"
+  ): MongoCollection =
     source(sourceName).cappedCollection(collectionName, size, max)
 
   /**
-   * Returns GridFS for configured source
-   * @param bucketName The bucketName for the GridFS instance
-   * @param sourceName The source name ex. default
-   * @return A GridFS
-   */
+    * Returns GridFS for configured source
+    * @param bucketName The bucketName for the GridFS instance
+    * @param sourceName The source name ex. default
+    * @return A GridFS
+    */
   def gridFS(bucketName: String = "fs", sourceName: String = "default"): GridFS =
     source(sourceName).gridFS(bucketName)
 }

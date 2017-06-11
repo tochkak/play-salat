@@ -1,10 +1,11 @@
 package services
 
 import javax.inject._
+
 import com.novus.salat.dao._
 import com.mongodb.casbah.Imports._
-import se.radley.plugin.salat.PlaySalat
-import models.{ Address, User }
+import models.{Address, User}
+import ru.tochkak.plugin.salat.PlaySalat
 
 @Singleton
 class UserDAO @Inject() (playSalat: PlaySalat, mongoContext: MongoContext) extends ModelCompanion[User, ObjectId] {

@@ -1,23 +1,25 @@
-package se.radley.plugin.salat
+package ru.tochkak.plugin.salat
 
-import play.api._
 import com.mongodb.casbah._
-import com.mongodb.{ MongoClientOptions, MongoException, ServerAddress, MongoOptions }
+import com.mongodb.casbah.commons.MongoDBObject
 import com.mongodb.casbah.gridfs.GridFS
-import commons.MongoDBObject
+import com.mongodb.{MongoClientOptions, ServerAddress}
+import play.api._
+
 import scala.util.Try
 
 trait PlaySalat {
   protected val configuration: Configuration
 
   case class MongoSource(
-      val hosts: List[ServerAddress],
-      val dbName: String,
-      val writeConcern: com.mongodb.WriteConcern,
-      val user: Option[String] = None,
-      val password: Option[String] = None,
-      val options: Option[MongoClientOptions],
-      private var conn: MongoClient = null) {
+    hosts: List[ServerAddress],
+    dbName: String,
+    writeConcern: com.mongodb.WriteConcern,
+    user: Option[String] = None,
+    password: Option[String] = None,
+    options: Option[MongoClientOptions]
+  ) {
+    private var conn: MongoClient = null
 
     def connection: MongoClient = {
       if (conn == null) {
@@ -34,10 +36,10 @@ trait PlaySalat {
         conn = Try(
           options.map(MongoClient(hosts, credentials, _)).
             getOrElse(MongoClient(hosts, credentials))).getOrElse {
-            throw configuration.reportError(
-              "mongodb",
-              s"Access denied to MongoDB database: [$dbName] with user: [${user.getOrElse("")}]")
-          }
+          throw configuration.reportError(
+            "mongodb",
+            s"Access denied to MongoDB database: [$dbName] with user: [${user.getOrElse("")}]")
+        }
 
         conn.setWriteConcern(writeConcern)
       }
@@ -79,46 +81,48 @@ trait PlaySalat {
   protected val sources: Map[String, MongoSource]
 
   /**
-   * Returns the MongoSource that has been configured in application.conf
-   * @param source The source name ex. default
-   * @return A MongoSource
-   */
+    * Returns the MongoSource that has been configured in application.conf
+    * @param source The source name ex. default
+    * @return A MongoSource
+    */
   def source(source: String): MongoSource
 
   /**
-   * Returns MongoDB for configured source
-   * @param sourceName The source name ex. default
-   * @return A MongoDB
-   */
+    * Returns MongoDB for configured source
+    * @param sourceName The source name ex. default
+    * @return A MongoDB
+    */
   def db(sourceName: String = "default"): MongoDB
 
   /**
-   * Returns MongoCollection that has been configured in application.conf
-   * @param collectionName The MongoDB collection name
-   * @param sourceName The source name ex. default
-   * @return A MongoCollection
-   */
+    * Returns MongoCollection that has been configured in application.conf
+    * @param collectionName The MongoDB collection name
+    * @param sourceName The source name ex. default
+    * @return A MongoCollection
+    */
   def collection(collectionName: String, sourceName: String = "default"): MongoCollection
 
   /**
-   * Returns Capped MongoCollection that has been configured in application.conf
-   * @param collectionName The MongoDB collection name
-   * @param size The capped collection size
-   * @param max The capped collection max number of documents
-   * @param sourceName The source name ex. default
-   * @return A MongoCollection
-   */
-  def cappedCollection(collectionName: String,
-                       size: Long,
-                       max: Option[Long] = None,
-                       sourceName: String = "default"): MongoCollection
+    * Returns Capped MongoCollection that has been configured in application.conf
+    * @param collectionName The MongoDB collection name
+    * @param size The capped collection size
+    * @param max The capped collection max number of documents
+    * @param sourceName The source name ex. default
+    * @return A MongoCollection
+    */
+  def cappedCollection(
+    collectionName: String,
+    size: Long,
+    max: Option[Long] = None,
+    sourceName: String = "default"
+  ): MongoCollection
 
   /**
-   * Returns GridFS for configured source
-   * @param bucketName The bucketName for the GridFS instance
-   * @param sourceName The source name ex. default
-   * @return A GridFS
-   */
+    * Returns GridFS for configured source
+    * @param bucketName The bucketName for the GridFS instance
+    * @param sourceName The source name ex. default
+    * @return A GridFS
+    */
   def gridFS(bucketName: String = "fs", sourceName: String = "default"): GridFS
 
 }

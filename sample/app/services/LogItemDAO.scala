@@ -1,10 +1,11 @@
 package services
 
 import javax.inject._
+
 import com.novus.salat.dao._
 import com.mongodb.casbah.Imports._
-import se.radley.plugin.salat.PlaySalat
 import models.LogItem
+import ru.tochkak.plugin.salat.PlaySalat
 
 @Singleton
 class LogItemDAO @Inject() (playSalat: PlaySalat, mongoContext: MongoContext) extends ModelCompanion[LogItem, ObjectId] {
