@@ -9,7 +9,7 @@ The plugin's functionality simpifies the use of salat by presenting a simple "pl
  * https://github.com/mongodb/casbah
  * https://github.com/salat/salat
 
- [![Build Status](https://travis-ci.org/shayanlinux/play-salat.svg?branch=master)](https://travis-ci.org/shayanlinux/play-salat)
+ [![Build Status](https://travis-ci.org/tochkak/play-salat.svg?branch=master)](https://travis-ci.org/shayanlinux/play-salat)
 
 
 ## Installation
@@ -17,7 +17,7 @@ The plugin's functionality simpifies the use of salat by presenting a simple "pl
 Start by adding the plugin, in your `project/Build.scala`
 ````scala
 val appDependencies = Seq(
-  "com.github.shayanlinux" %% "play-plugins-salat" % "1.6.0"
+  "ru.tochkak" %% "play-plugins-salat" % "1.7.0"
 )
 ````
 Then we can add the implicit converstions to and from ObjectId by adding to the routesImport and add ObjectId to all the templates
@@ -51,13 +51,13 @@ Use version `1.6.0` that provides Play-Salat __not__ as a _plugin_ but as a _Gui
 
 ````scala
 val appDependencies = Seq(
-  "com.github.shayanlinux" %% "play-plugins-salat" % "1.6.0"
+  "ru.tochkak" %% "play-plugins-salat" % "1.7.0"
 )
 ````
 
 Add the following line to the `conf/application.conf` file. This will enable the Play-Salat module and Guice will inject it.
 
-	play.modules.enabled  += "se.radley.plugin.salat.PlaySalatModule"
+	play.modules.enabled  += "ru.tochkak.plugin.salat.PlaySalatModule"
 
 ## Configuration
 now we need to setup our connections. The plugin is modeled after how plays DB plugin is built.
@@ -272,9 +272,5 @@ You can override mapping names and configure how salat does it's type hinting. r
 In the sample there is a custom `mongoContext`, partly because we need to add plays classloader to salat so it knows when to reload it's graters,
 but also so we can override all models id fields to be serialized to MongoDB's _id.
 
-- [Sample](https://github.com/shayanlinux/play-salat/tree/master/sample)
+- [Sample](https://github.com/tochkak/play-salat/tree/master/sample)
 
-## Enums?
-If you're using Scala Enumerations have a look at my play-enumeration project.
-
-- [play-enumeration](https://github.com/leon/play-enumeration)
