@@ -16,12 +16,12 @@ class OptionsFromConfigSpec extends Specification with AllExpectations {
         ("mongodb.default.options.connectionsPerHost" -> "333"),
         ("mongodb.default.options.connectTimeout" -> "34000"),
         ("mongodb.default.options.cursorFinalizerEnabled" -> "true"),
-        ("mongodb.default.options.dbDecoderFactory" -> "se.radley.plugin.salat.NonDefaultDBDecoderFactory"),
-        ("mongodb.default.options.dbEncoderFactory" -> "se.radley.plugin.salat.NonDefaultDBEncoderFactory"),
+        ("mongodb.default.options.dbDecoderFactory" -> "ru.tochkak.plugin.salat.NonDefaultDBDecoderFactory"),
+        ("mongodb.default.options.dbEncoderFactory" -> "ru.tochkak.plugin.salat.NonDefaultDBEncoderFactory"),
         ("mongodb.default.options.description" -> "Some Description"),
         ("mongodb.default.options.maxWaitTime" -> "68000"),
         ("mongodb.default.options.readPreference" -> "PRIMARY"),
-        ("mongodb.default.options.socketFactory" -> "se.radley.plugin.salat.NonDefaultSocketFactory"),
+        ("mongodb.default.options.socketFactory" -> "ru.tochkak.plugin.salat.NonDefaultSocketFactory"),
         ("mongodb.default.options.socketKeepAlive" -> "true"),
         ("mongodb.default.options.socketTimeout" -> "21000"),
         ("mongodb.default.options.threadsAllowedToBlockForConnectionMultiplier" -> "22"),
@@ -33,19 +33,19 @@ class OptionsFromConfigSpec extends Specification with AllExpectations {
       optionsOpt must beSome
       val options = optionsOpt.get
       // All Overridden
-      options.getConnectionsPerHost must be equalTo(333)
-      options.getConnectTimeout must be equalTo(34000)
+      options.getConnectionsPerHost must be equalTo 333
+      options.getConnectTimeout must be equalTo 34000
       options.isCursorFinalizerEnabled must beTrue
       options.getDbDecoderFactory must haveClass[NonDefaultDBDecoderFactory]
       options.getDbEncoderFactory must haveClass[NonDefaultDBEncoderFactory]
-      options.getDescription must be equalTo("Some Description")
-      options.getMaxWaitTime must be equalTo(68000)
-      options.getReadPreference must be equalTo(ReadPreference.primary())
+      options.getDescription must be equalTo "Some Description"
+      options.getMaxWaitTime must be equalTo 68000
+      options.getReadPreference must be equalTo ReadPreference.primary()
       options.getSocketFactory must haveClass[NonDefaultSocketFactory]
       options.isSocketKeepAlive must beTrue
-      options.getSocketTimeout must be equalTo(21000)
-      options.getThreadsAllowedToBlockForConnectionMultiplier must be equalTo(22)
-      options.getWriteConcern must be equalTo(WriteConcern.SAFE)
+      options.getSocketTimeout must be equalTo 21000
+      options.getThreadsAllowedToBlockForConnectionMultiplier must be equalTo 22
+      options.getWriteConcern must be equalTo WriteConcern.ACKNOWLEDGED
     }
 
     "Return none options if config is empty" in {
