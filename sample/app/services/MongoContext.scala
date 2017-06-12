@@ -1,11 +1,12 @@
 package services
 
 import javax.inject._
-import com.novus.salat.{ TypeHintFrequency, StringTypeHintStrategy, Context }
+
 import play.api.Environment
+import salat.{Context, StringTypeHintStrategy, TypeHintFrequency}
 
 @Singleton
-class MongoContext @Inject() (environment: Environment) {
+class MongoContext @Inject()(environment: Environment) {
 
   implicit val context = {
     val context = new Context {

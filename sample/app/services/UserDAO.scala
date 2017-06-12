@@ -2,17 +2,17 @@ package services
 
 import javax.inject._
 
-import com.novus.salat.dao._
 import com.mongodb.casbah.Imports._
 import models.{Address, User}
 import ru.tochkak.plugin.salat.PlaySalat
+import salat.dao.{ModelCompanion, SalatDAO}
 
 @Singleton
-class UserDAO @Inject() (playSalat: PlaySalat, mongoContext: MongoContext) extends ModelCompanion[User, ObjectId] {
+class UserDAO @Inject()(playSalat: PlaySalat, mongoContext: MongoContext) extends ModelCompanion[User, ObjectId] {
   import mongoContext._
 
   val collection = playSalat.collection("users")
-  val dao = new SalatDAO[User, ObjectId](collection) {}
+  val dao        = new SalatDAO[User, ObjectId](collection) {}
 
   // Indexes
   collection.createIndex(DBObject("username" -> 1), DBObject("name" -> "user_email", "unique" -> true))
