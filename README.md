@@ -1,5 +1,5 @@
 # Disclaimer
-**This is continuation of Leon's [play-salat plugin](https://github.com/leon/play-salat) for future versions of Play and is comptabile with latest version of play 2.5.3. Compatibility with earlier versions is not checked, please use older artifacts for older versions of Play Framework. Update your Build.scala or build.sbt with artifactId mentioned below.**
+**This is continuation of Leon's [play-salat plugin](https://github.com/leon/play-salat) for future versions of Play and is comptabile with latest version of play 2.5.*. Compatibility with earlier versions is not checked, please use older artifacts for older versions of Play Framework. Update your Build.scala or build.sbt with artifactId mentioned below.**
 
 # MongoDB Salat plugin for Play Framework 2
 Salat is a ORM for MongoDBs scala driver called Casbah.
@@ -9,7 +9,7 @@ The plugin's functionality simpifies the use of salat by presenting a simple "pl
  * https://github.com/mongodb/casbah
  * https://github.com/salat/salat
 
- [![Build Status](https://travis-ci.org/tochkak/play-salat.svg?branch=master)](https://travis-ci.org/shayanlinux/play-salat)
+ [![Build Status](https://travis-ci.org/tochkak/play-salat.svg?branch=master)](https://travis-ci.org/tochkak/play-salat)
 
 
 ## Installation
@@ -38,13 +38,13 @@ Add these lines:
     dbplugin = disabled
     evolutionplugin = disabled
     ehcacheplugin = disabled
-    
+
 **Only for Play 2.3.x and 2.4.x**
 
 We now need to register the plugin, this is done by creating(or appending) to the `conf/play.plugins` file
 
     500:se.radley.plugin.salat.SalatPlugin
-    
+
 **Only for Play 2.5.x+**
 
 Use version `1.6.0` that provides Play-Salat __not__ as a _plugin_ but as a _Guicable module_.
