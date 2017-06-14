@@ -1,3 +1,4 @@
+[![Maven Central][img version shield]][maven]
 # Disclaimer
 **This is continuation of Leon's [play-salat plugin](https://github.com/leon/play-salat) for future versions of Play and is comptabile with latest version of play 2.5.*. Compatibility with earlier versions is not checked, please use older artifacts for older versions of Play Framework. Update your Build.scala or build.sbt with artifactId mentioned below.**
 
@@ -274,3 +275,5 @@ but also so we can override all models id fields to be serialized to MongoDB's _
 
 - [Sample](https://github.com/tochkak/play-salat/tree/master/sample)
 
+[img version shield]: https://img.shields.io/maven-central/v/ru.tochkak/play-plugins-salat_2.11.svg
+[maven]: http://mvnrepository.com/artifact/ru.tochkak/play-plugins-salat_2.11
