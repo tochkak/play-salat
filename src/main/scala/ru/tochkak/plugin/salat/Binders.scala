@@ -55,9 +55,9 @@ object Binders {
         if (ObjectId.isValid(s))
           JsSuccess(new ObjectId(s))
         else
-          JsError(ValidationError("validate.error.objectid"))
+          JsError(JsonValidationError("validate.error.objectid"))
       }
-      case _ => JsError(Seq(JsPath() -> Seq(ValidationError("validate.error.expected.jsstring"))))
+      case _ => JsError(Seq(JsPath() -> Seq(JsonValidationError("validate.error.expected.jsstring"))))
     }
   }
 

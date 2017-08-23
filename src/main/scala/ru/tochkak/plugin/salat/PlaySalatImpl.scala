@@ -49,14 +49,14 @@ class PlaySalatImpl @Inject()(
     Future.successful(())
   }
 
-  protected lazy val configuration = config.getConfig("mongodb").getOrElse(Configuration.empty)
+  protected lazy val configuration = config.getOptional[Configuration]("mongodb").getOrElse(Configuration.empty)
 
   protected lazy val sources: Map[String, MongoSource] = configuration.subKeys.map { sourceKey =>
-    val source = configuration.getConfig(sourceKey).getOrElse(Configuration.empty)
-    val options: Option[MongoClientOptions] = source.getConfig("options").flatMap(opts =>
+    val source = configuration.getOptional[Configuration](sourceKey).getOrElse(Configuration.empty)
+    val options: Option[MongoClientOptions] = source.getOptional[Configuration]("options").flatMap(opts =>
       OptionsFromConfig(opts))
 
-    source.getString("uri").map { str =>
+    source.getOptional[String]("uri").map { str =>
       // MongoURI config - http://www.mongodb.org/display/DOCS/Connections
       val uri = MongoClientURI(str)
       val hosts = uri.hosts.map { host =>
@@ -76,32 +76,32 @@ class PlaySalatImpl @Inject()(
       val password = uri.password.map(_.mkString).filterNot(_.isEmpty)
       sourceKey -> MongoSource(hosts, db, writeConcern, user, password, options)
     }.getOrElse {
-      val dbName = source.getString("db").getOrElse(
+      val dbName = source.getOptional[String]("db").getOrElse(
         throw configuration.reportError(
           "mongodb." + sourceKey + ".db",
           "db missing for source[" + sourceKey + "]"))
 
       // Simple config
-      val host = source.getString("host").getOrElse("127.0.0.1")
-      val port = source.getInt("port").getOrElse(27017)
-      val user: Option[String] = source.getString("user")
-      val password: Option[String] = source.getString("password")
+      val host = source.getOptional[String]("host").getOrElse("127.0.0.1")
+      val port = source.getOptional[Int]("port").getOrElse(27017)
+      val user: Option[String] = source.getOptional[String]("user")
+      val password: Option[String] = source.getOptional[String]("password")
 
       // Replica set config
-      val hosts: List[ServerAddress] = source.getConfig("replicaset").map { replicaset =>
+      val hosts: List[ServerAddress] = source.getOptional[Configuration]("replicaset").map { replicaset =>
         replicaset.subKeys.map { hostKey =>
-          val c = replicaset.getConfig(hostKey).get
-          val host = c.getString("host").getOrElse(
+          val c = replicaset.getOptional[Configuration](hostKey).get
+          val host = c.getOptional[String]("host").getOrElse(
             throw configuration.reportError(
               "mongodb." + sourceKey + ".replicaset",
               "host missing for replicaset in source[" + sourceKey + "]"))
-          val port = c.getInt("port").getOrElse(27017)
+          val port = c.getOptional[Int]("port").getOrElse(27017)
           new ServerAddress(host, port)
         }.toList.reverse
       }.getOrElse(List.empty)
 
       val writeConcern =
-        source.getString("writeconcern", Some(Set("fsyncsafe", "replicassafe", "safe", "normal")))
+        source.getOptional[String]("writeconcern")
           .flatMap(WriteConcern.valueOf)
           .getOrElse(WriteConcern.Safe)
 

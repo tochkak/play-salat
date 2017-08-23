@@ -50,11 +50,11 @@ object ObjectIdSpec extends Specification {
     }
 
     "invalidate if faulty not JSString" in {
-      JsNumber(1).validate[ObjectId] must equalTo(JsError(Seq(JsPath() -> Seq(ValidationError("validate.error.expected.jsstring")))))
+      JsNumber(1).validate[ObjectId] must equalTo(JsError(Seq(JsPath() -> Seq(JsonValidationError("validate.error.expected.jsstring")))))
     }
 
     "invalidate if faulty not ObjectId" in {
-      JsString("not a object id").validate[ObjectId] must equalTo(JsError(Seq(JsPath() -> Seq(ValidationError("validate.error.objectid")))))
+      JsString("not a object id").validate[ObjectId] must equalTo(JsError(Seq(JsPath() -> Seq(JsonValidationError("validate.error.objectid")))))
     }
   }
   

@@ -23,32 +23,32 @@ object OptionsFromConfig {
 
     val builder = new MongoClientOptions.Builder()
 
-    config.getInt("connectionsPerHost").map(v => builder.connectionsPerHost(v))
-    config.getInt("connectTimeout").map(v => builder.connectTimeout(v))
-    config.getBoolean("cursorFinalizerEnabled").map(v => builder.cursorFinalizerEnabled(v))
-    config.getString("dbDecoderFactory").flatMap(
+    config.getOptional[Int]("connectionsPerHost").map(v => builder.connectionsPerHost(v))
+    config.getOptional[Int]("connectTimeout").map(v => builder.connectTimeout(v))
+    config.getOptional[Boolean]("cursorFinalizerEnabled").map(v => builder.cursorFinalizerEnabled(v))
+    config.getOptional[String]("dbDecoderFactory").flatMap(
       className => getInstanceFromName[DBDecoderFactory](className)).map(v => builder.dbDecoderFactory(v)
     )
-    config.getString("dbEncoderFactory").flatMap(
+    config.getOptional[String]("dbEncoderFactory").flatMap(
       className => getInstanceFromName[DBEncoderFactory](className)).map(v => builder.dbEncoderFactory(v)
     )
-    config.getString("description").map(v => builder.description(v))
-    config.getInt("maxWaitTime").map(v => builder.maxWaitTime(v))
-    config.getString("readPreference").flatMap { name =>
+    config.getOptional[String]("description").map(v => builder.description(v))
+    config.getOptional[Int]("maxWaitTime").map(v => builder.maxWaitTime(v))
+    config.getOptional[String]("readPreference").flatMap { name =>
       try {
         Some(ReadPreference.valueOf(name))
       } catch {
         case _: IllegalArgumentException => None
       }
     }.map(v => builder.readPreference(v))
-    config.getString("socketFactory").flatMap(
+    config.getOptional[String]("socketFactory").flatMap(
       className => getInstanceFromName[SocketFactory](className)
     ).map(v => builder.socketFactory(v))
-    config.getBoolean("socketKeepAlive").map(v => builder.socketKeepAlive(v))
-    config.getInt("socketTimeout").map(v => builder.socketTimeout(v))
-    config.getInt("threadsAllowedToBlockForConnectionMultiplier").map(v => builder.threadsAllowedToBlockForConnectionMultiplier(v))
-    config.getString("writeConcern").map(name => WriteConcern.valueOf(name)).map(v => builder.writeConcern(v))
-    config.getBoolean("ssl").map(v => if (v) builder.socketFactory(SSLSocketFactory.getDefault))
+    config.getOptional[Boolean]("socketKeepAlive").map(v => builder.socketKeepAlive(v))
+    config.getOptional[Int]("socketTimeout").map(v => builder.socketTimeout(v))
+    config.getOptional[Int]("threadsAllowedToBlockForConnectionMultiplier").map(v => builder.threadsAllowedToBlockForConnectionMultiplier(v))
+    config.getOptional[String]("writeConcern").map(name => WriteConcern.valueOf(name)).map(v => builder.writeConcern(v))
+    config.getOptional[Boolean]("ssl").map(v => if (v) builder.socketFactory(SSLSocketFactory.getDefault))
 
     Some(builder.build())
   }
