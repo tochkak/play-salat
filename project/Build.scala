@@ -4,8 +4,10 @@ import sbt._
 
 object ProjectBuild extends Build {
 
-  lazy val buildVersion = "1.7.2"
-  lazy val playVersion  = "2.6.3"
+  lazy val buildVersion = "1.7.3"
+  lazy val playVersion = "2.6.6"
+  lazy val cashbahVersion = "3.1.1"
+  lazy val salatVersion = "1.11.2"
 
   lazy val root = Project(id = "play-plugins-salat",
     base = file("."),
@@ -13,7 +15,7 @@ object ProjectBuild extends Build {
     organization := "ru.tochkak",
     description := "MongoDB Salat plugin for PlayFramework 2",
     version := buildVersion,
-    scalaVersion := "2.12.3",
+    scalaVersion := "2.12.4",
     EclipseKeys.withSource := true,
     EclipseKeys.withJavadoc := true,
     scalacOptions ++= Seq("-unchecked", "-deprecation", "-feature"),
@@ -30,8 +32,8 @@ object ProjectBuild extends Build {
       "com.typesafe.play" %% "play" % playVersion % "provided",
       "com.typesafe.play" % "play-exceptions" % playVersion % "provided",
       "com.typesafe.play" %% "play-specs2" % playVersion % "test",
-      "com.github.salat" %% "salat" % "1.11.2",
-      "org.mongodb" %% "casbah" % "3.1.1"
+      "com.github.salat" %% "salat" % salatVersion,
+      "org.mongodb" %% "casbah-gridfs" % cashbahVersion
     )
   )
 }
