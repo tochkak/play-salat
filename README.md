@@ -1,6 +1,5 @@
 [![Maven Central][img version shield]][maven]
-# Disclaimer
-**This is continuation of Leon's [play-salat plugin](https://github.com/leon/play-salat) for future versions of Play and is comptabile with latest version of play 2.5.*. Compatibility with earlier versions is not checked, please use older artifacts for older versions of Play Framework. Update your Build.scala or build.sbt with artifactId mentioned below.**
+[![Build Status](https://travis-ci.org/tochkak/play-salat.svg?branch=master)](https://travis-ci.org/tochkak/play-salat)
 
 # MongoDB Salat plugin for Play Framework 2
 Salat is a ORM for MongoDBs scala driver called Casbah.
@@ -10,28 +9,13 @@ The plugin's functionality simpifies the use of salat by presenting a simple "pl
  * https://github.com/mongodb/casbah
  * https://github.com/salat/salat
 
- [![Build Status](https://travis-ci.org/tochkak/play-salat.svg?branch=master)](https://travis-ci.org/tochkak/play-salat)
-
-
 ## Installation
 
-Start by adding the plugin, in your `project/Build.scala`
+Start by adding the plugin, in your `build.sbt`
 ````scala
-val appDependencies = Seq(
-  "ru.tochkak" %% "play-plugins-salat" % "1.7.0"
-)
+libraryDependencies += "ru.tochkak" % "play-plugins-salat" % "1.7.2"
 ````
 Then we can add the implicit converstions to and from ObjectId by adding to the routesImport and add ObjectId to all the templates
-
-####Play 2.3.x and subsequent
-
-````scala
-import play.twirl.sbt.Import.TwirlKeys
-val main = Project(appName, file(".")).enablePlugins(play.PlayScala).settings(
-  routesImport += "se.radley.plugin.salat.Binders._",
-  TwirlKeys.templateImports += "org.bson.types.ObjectId"
-)
-````
 
 We continue to edit the `conf/application.conf` file. We need to disable some plugins that we don't need.
 Add these lines:
@@ -39,22 +23,6 @@ Add these lines:
     dbplugin = disabled
     evolutionplugin = disabled
     ehcacheplugin = disabled
-
-**Only for Play 2.3.x and 2.4.x**
-
-We now need to register the plugin, this is done by creating(or appending) to the `conf/play.plugins` file
-
-    500:se.radley.plugin.salat.SalatPlugin
-
-**Only for Play 2.5.x+**
-
-Use version `1.6.0` that provides Play-Salat __not__ as a _plugin_ but as a _Guicable module_.
-
-````scala
-val appDependencies = Seq(
-  "ru.tochkak" %% "play-plugins-salat" % "1.7.0"
-)
-````
 
 Add the following line to the `conf/application.conf` file. This will enable the Play-Salat module and Guice will inject it.
 
